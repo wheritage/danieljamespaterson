@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://danieljamespaterson.vercel.app/sitemap.xml
