@@ -23,7 +23,7 @@ Same rules as W Héritage: self-hosted `assets/vendor/lenis.min.js` 1.3.27, `gsa
 - `data-split` titles: lines (split on `<br>`, per `lang` span) rise out of a mask, 1.15 s expo.out, 80 ms stagger.
   `data-reveal` blocks: 24 px rise + fade, batched. `.wipe` images: left-to-right `clip-path` wipe.
   `data-rule` containers: top rule drawn by clip-path.
-- Hero ambient layer: canvas wind lines driven by the GSAP ticker time, paused off-screen, ~1/3 speed of the primary layer.
+- Inner pages: hero on a static sky gradient; the WebGL sky lives on the home page only (see below).
 - House rules: zero bounce, exits `power2.in` ~35 % shorter, no infinite loops without state, no glow, no gradient text,
   no glassmorphism, no invented figures or "since 20XX" badges, no numbered eyebrows, no scroll cues, no em dashes in copy.
 - `prefers-reduced-motion`: resolved frames, opacity only, no Lenis.
