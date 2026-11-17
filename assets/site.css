@@ -316,3 +316,63 @@ section { position: relative; scroll-margin-top: var(--header-h); }
   .nav { gap: .8rem; }
   .nav-tools { gap: .4rem; }
 }
+
+/* ==========================================================================
+   V2 — voile, transitions de page, curseur, boutons magnétiques, grand nom
+   ========================================================================== */
+.btn { position: relative; overflow: hidden; }
+.btn > span { position: relative; z-index: 1; }
+.btn > svg { position: relative; z-index: 1; }
+/* Remplissage qui monte du bas au survol (transform seulement) */
+.btn::before { content: ''; position: absolute; inset: 0; transform: translateY(101%); transition: transform .55s var(--ease-out); z-index: 0; }
+.btn:hover::before { transform: translateY(0); }
+.btn--primary::before { background: var(--encre); }
+.btn--primary:hover { background: var(--ambre); }
+.btn--line { border: 1px solid var(--encre); color: var(--encre); }
+.btn--line::before { background: var(--encre); }
+.btn--line:hover { color: var(--blanc); }
+.btn--ink { background: var(--encre); color: var(--blanc); }
+.btn--ink::before { background: var(--ambre); }
+.btn--xl { padding: 1.4rem 2.4rem; font-size: 1.05rem; }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+
+/* Voile : couvre la page avant le JS (html.veiled), puis le vrai #veil prend le relais.
+   Filet de sécurité : si le JS ne tourne pas, le voile disparaît seul après 4 s. */
+html.veiled::after {
+  content: ''; position: fixed; inset: 0; z-index: 10000; background: var(--ciel-pale);
+  animation: veil-fallback 0s 4s forwards;
+}
+@keyframes veil-fallback { to { visibility: hidden; } }
+#veil {
+  position: fixed; inset: 0; z-index: 10000; background: var(--ciel-pale);
+  display: grid; place-items: center; pointer-events: all;
+}
+#veil.gone { visibility: hidden; pointer-events: none; }
+.veil-name { font-family: var(--serif); color: var(--encre); font-size: clamp(2.6rem, 8vw, 7rem); line-height: .98; text-align: center; letter-spacing: -.02em; }
+.veil-name .line-mask { overflow: hidden; display: block; padding-bottom: .06em; }
+.veil-name .line-mask > span { display: block; }
+.veil-name em { font-style: italic; color: var(--ciel-fonce); }
+.veil-sun { width: 14px; height: 14px; background: var(--ambre); margin: 1.6rem auto 0; transform-origin: center; }
+
+/* Curseur : anneau + étiquette (pointeur fin seulement, jamais en mouvement réduit) */
+.cursor { position: fixed; left: 0; top: 0; z-index: 9500; pointer-events: none; width: 0; height: 0; }
+.cursor-ring {
+  position: absolute; left: -18px; top: -18px; width: 36px; height: 36px;
+  border: 1px solid var(--encre); border-radius: 50%;
+  display: grid; place-items: center;
+  transition: transform .45s var(--ease-out), background-color .45s var(--ease-out), border-color .45s var(--ease-out), opacity .3s;
+}
+.cursor-label { font-size: .72rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--blanc); opacity: 0; transform: scale(.6); transition: opacity .3s, transform .45s var(--ease-out); white-space: nowrap; }
+.cursor.is-link .cursor-ring { transform: scale(1.5); border-color: var(--ambre); }
+.cursor.is-label .cursor-ring { transform: scale(2.6); background: var(--encre); border-color: var(--encre); }
+.cursor.is-label .cursor-label { opacity: 1; transform: scale(.385); }
+.cursor.is-hidden .cursor-ring { opacity: 0; }
+.cursor.on-dark .cursor-ring { border-color: rgba(255,255,255,.7); }
+.cursor.on-dark.is-label .cursor-ring { background: var(--ambre); border-color: var(--ambre); }
+/* Le curseur circulaire est l'exception assumée au « aucun coin arrondi » : c'est un pointeur, pas une surface */
+
+/* Grand nom en pied de page */
+.footer-giant { font-family: var(--serif); color: var(--blanc); font-size: clamp(3.2rem, 11.5vw, 11rem); line-height: .92; letter-spacing: -.035em; padding: 4rem 0 3rem; border-bottom: 1px solid rgba(255,255,255,.12); }
+.footer-giant .line-mask { display: block; overflow: hidden; padding-bottom: .05em; }
+.footer-giant .line-mask > span { display: block; }
+.footer-giant em { font-style: italic; color: var(--ciel); }

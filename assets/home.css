@@ -1,0 +1,121 @@
+/* ==========================================================================
+   ACCUEIL — « Une journée dans le ciel »
+   Le ciel WebGL (#sky, sky.js) est fixe derrière toute la page. Les sections transparentes
+   le laissent voir ; les sections « papier » (à propos) et « encre » (démarche) le couvrent.
+   ========================================================================== */
+
+/* Repli sans WebGL : un dégradé de ciel statique */
+body.has-sky { background: linear-gradient(180deg, #9CCDEA 0%, #DCEEF8 40%, #F6F8FA 70%, #F2C9B4 100%) fixed; }
+html.sky-on body.has-sky { background: var(--nuage); }
+#sky { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+.home, .has-sky .footer { position: relative; z-index: 1; }
+.has-sky .site-header:not(.scrolled) .brand-name small { color: var(--encre); opacity: .7; }
+
+/* ── Héros ── */
+.h-hero { min-height: 100svh; display: flex; align-items: flex-end; padding: calc(var(--header-h) + 4rem) 0 clamp(3rem, 7vh, 5.5rem); }
+.h-hero-inner { will-change: transform; }
+.h-kicker { display: flex; align-items: center; gap: 1rem; font-size: .8rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--encre); margin-bottom: clamp(1.5rem, 3vh, 2.5rem); }
+.h-kicker-rule { width: 48px; height: 1px; background: var(--ambre); flex: none; }
+.h-title {
+  font-family: var(--serif); font-weight: 400; color: var(--encre);
+  font-size: clamp(3.4rem, 10.4vw, 10.5rem); line-height: .9; letter-spacing: -.04em;
+}
+.h-title em { font-style: italic; color: var(--ciel-fonce); letter-spacing: -.03em; }
+.h-title .line-mask { display: block; overflow: hidden; padding-bottom: .07em; margin-bottom: -.07em; }
+.h-title .line-mask > span { display: block; }
+.h-hero-foot { display: grid; grid-template-columns: 1fr auto; gap: 3rem; align-items: end; margin-top: clamp(2rem, 5vh, 3.5rem); padding-top: 2rem; border-top: 1px solid rgba(19,40,59,.25); }
+.h-lede { font-size: clamp(1.05rem, 1.4vw, 1.3rem); line-height: 1.55; color: var(--encre); max-width: 32em; }
+.h-actions { display: flex; flex-wrap: wrap; gap: 1rem; }
+@media (max-width: 860px) {
+  .h-hero-foot { grid-template-columns: 1fr; gap: 2rem; }
+}
+
+/* ── Manifeste ── */
+.h-manifest { padding: clamp(8rem, 22vh, 14rem) 0 clamp(6rem, 14vh, 10rem); }
+.h-manifest-text { font-family: var(--serif); font-size: clamp(1.9rem, 4.1vw, 3.9rem); line-height: 1.12; letter-spacing: -.02em; color: var(--encre); max-width: 22ch; max-width: 26ch; }
+.h-manifest-text em { font-style: italic; color: var(--ambre); }
+.h-manifest-text .wd { display: inline; opacity: .16; transition: none; }
+.no-js .h-manifest-text .wd, .reduce .h-manifest-text .wd { opacity: 1; }
+.h-principles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-top: clamp(4rem, 9vh, 7rem); }
+.h-principles > div { padding-top: 1.4rem; border-top: 1px solid rgba(19,40,59,.3); }
+.h-principles h3 { font-size: clamp(1.3rem, 1.8vw, 1.6rem); margin-bottom: .5rem; }
+.h-principles p { color: var(--texte); }
+@media (max-width: 760px) { .h-principles { grid-template-columns: 1fr; } }
+
+/* ── Services : piste horizontale épinglée ── */
+.h-services-pin { min-height: 100svh; display: flex; flex-direction: column; justify-content: center; padding: calc(var(--header-h) + 1rem) 0 3rem; overflow: hidden; }
+.h-services-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 2rem; margin-bottom: clamp(2rem, 5vh, 3.5rem); }
+.h-services-head h2 { font-size: clamp(2.2rem, 4.6vw, 4.2rem); }
+.h-services-progress { width: min(240px, 30vw); height: 1px; background: rgba(19,40,59,.2); position: relative; margin-bottom: 1rem; }
+.h-services-progress span { position: absolute; inset: 0; background: var(--encre); transform-origin: left; transform: scaleX(0); }
+.h-track { display: flex; gap: clamp(1rem, 2vw, 1.6rem); padding: 0 var(--pad-x); width: max-content; will-change: transform; }
+.h-card {
+  position: relative; flex: none; width: clamp(290px, 31vw, 440px); min-height: clamp(380px, 56vh, 520px);
+  background: var(--blanc); color: var(--encre); text-decoration: none;
+  padding: clamp(1.6rem, 2.4vw, 2.4rem); display: flex; flex-direction: column;
+  border: 1px solid rgba(19,40,59,.08);
+  transition: background-color .55s var(--ease-out), color .55s var(--ease-out);
+}
+.h-card-ill { width: 100%; height: auto; max-height: 150px; color: var(--ciel-fonce); margin-bottom: auto; transition: color .55s var(--ease-out); }
+.h-card-ill path, .h-card-ill rect { vector-effect: non-scaling-stroke; }
+.h-card h3 { font-size: clamp(1.6rem, 2.3vw, 2.2rem); margin: 2rem 0 .9rem; transition: color .55s var(--ease-out); }
+.h-card p { color: var(--texte2); font-size: .98rem; transition: color .55s var(--ease-out); }
+.h-card-link { display: inline-flex; align-items: center; gap: .6rem; margin-top: 1.6rem; font-size: .85rem; font-weight: 600; color: var(--ambre); }
+.h-card-link svg { width: 16px; height: 16px; transition: transform .45s var(--ease-out); }
+.h-card:hover { background: var(--encre); }
+.h-card:hover h3 { color: var(--blanc); }
+.h-card:hover p { color: #A9BCCB; }
+.h-card:hover .h-card-ill { color: var(--ciel); }
+.h-card:hover .h-card-link { color: var(--ambre-vif); }
+.h-card:hover .h-card-link svg { transform: translateX(5px); }
+.h-card:focus-visible { outline-offset: 4px; }
+/* Sans épinglage (mobile, mouvement réduit) : défilement horizontal natif avec aimantation */
+.h-services:not(.is-pinned) .h-track { width: auto; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 1rem; scrollbar-width: thin; }
+.h-services:not(.is-pinned) .h-card { scroll-snap-align: start; }
+.h-services:not(.is-pinned) .h-services-pin { min-height: 0; padding: 5rem 0; }
+
+/* ── Démarche : épinglée, une étape par geste ── */
+.h-process { background: var(--encre); color: #D5E2EC; }
+.h-process-pin { min-height: 100svh; display: flex; align-items: center; padding: calc(var(--header-h) + 2rem) 0 3rem; }
+.h-process-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: clamp(3rem, 7vw, 7rem); align-items: center; }
+.h-process h2 { color: var(--blanc); font-size: clamp(2.3rem, 4.2vw, 4rem); }
+.h-process .eyebrow { color: var(--ciel); }
+.h-process-nav { list-style: none; margin-top: 3rem; display: grid; gap: .2rem; }
+.h-process-nav li { font-size: .95rem; color: rgba(213,226,236,.4); padding: .45rem 0 .45rem 1.4rem; position: relative; transition: color .45s var(--ease-out); }
+.h-process-nav li::before { content: ''; position: absolute; left: 0; top: 50%; width: 8px; height: 1px; background: currentColor; transition: width .45s var(--ease-out), background-color .45s; }
+.h-process-nav li.on { color: var(--blanc); }
+.h-process-nav li.on::before { width: 14px; background: var(--ambre-vif); }
+.h-process-right { position: relative; padding-left: clamp(2rem, 4vw, 3.5rem); }
+.h-rail { position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: rgba(255,255,255,.15); }
+.h-rail span { position: absolute; inset: 0; background: var(--ambre-vif); transform-origin: top; transform: scaleY(0); }
+.h-steps { display: grid; }
+.h-step { grid-area: 1 / 1; }
+.h-step-title { font-family: var(--serif); color: var(--blanc); font-size: clamp(2.2rem, 4.4vw, 4rem); line-height: 1; margin-bottom: 1.6rem; }
+.h-step p { font-size: clamp(1.05rem, 1.4vw, 1.25rem); color: #A9BCCB; max-width: 26em; }
+.h-step .line-mask { display: block; overflow: hidden; padding-bottom: .08em; }
+.h-step .line-mask > span { display: block; }
+/* Sans épinglage : les étapes s'empilent */
+.h-process:not(.is-pinned) .h-step { grid-area: auto; padding: 2rem 0; border-bottom: 1px solid rgba(255,255,255,.12); }
+.h-process:not(.is-pinned) .h-process-nav { display: none; }
+.h-process:not(.is-pinned) .h-rail { display: none; }
+.h-process:not(.is-pinned) .h-process-right { padding-left: 0; }
+@media (max-width: 860px) { .h-process-grid { grid-template-columns: 1fr; } }
+
+/* ── À propos : papier ── */
+.h-about { background: var(--blanc); padding: clamp(6rem, 13vw, 11rem) 0; }
+.h-about-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: clamp(3rem, 7vw, 7rem); align-items: center; }
+.h-portrait { margin: 0; }
+.h-portrait-inner { display: block; overflow: hidden; aspect-ratio: 4 / 5; background: var(--nuage2); position: relative; }
+.h-portrait-img { position: absolute; inset: -8% 0; }
+.h-portrait-img img { width: 100%; height: 100%; object-fit: cover; }
+.h-about-text h2 { font-size: clamp(2.6rem, 5vw, 4.6rem); line-height: .98; }
+.h-about-text blockquote { font-family: var(--serif); font-style: italic; font-size: clamp(1.4rem, 2.3vw, 2rem); line-height: 1.3; color: var(--encre); margin: 2.2rem 0 1.6rem; padding-left: 1.4rem; border-left: 2px solid var(--ambre); }
+.h-about-bio { color: var(--texte2); margin-bottom: 2rem; }
+@media (max-width: 860px) { .h-about-grid { grid-template-columns: 1fr; } .h-portrait { max-width: 420px; } }
+
+/* ── Crépuscule ── */
+.h-dusk { min-height: 110svh; display: flex; align-items: center; padding: 8rem 0; text-align: center; }
+.h-dusk-inner { display: flex; flex-direction: column; align-items: center; }
+.h-dusk .eyebrow { justify-content: center; color: var(--encre); }
+.h-dusk-title { font-size: clamp(2.8rem, 8vw, 8rem); line-height: .95; letter-spacing: -.035em; max-width: 14ch; }
+.h-dusk .h-lede { margin: 2rem auto 2.8rem; text-align: center; }
