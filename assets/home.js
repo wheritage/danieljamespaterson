@@ -96,18 +96,22 @@
     var bar = section.querySelector('.h-services-progress span');
     section.classList.add('is-pinned');
     function dist() { return Math.max(0, track.scrollWidth - window.innerWidth); }
-    var move = gsap.to(track, {
-      x: function () { return -dist(); }, ease: 'none',
+    // Pause au début (la première carte se lit) et à la fin, puis une piste plus longue que la distance réelle :
+    // environ 1,6 px de défilement par pixel de déplacement, pour que chaque carte reste lisible.
+    var tl = gsap.timeline({
       scrollTrigger: {
-        trigger: section, start: 'top top', end: function () { return '+=' + dist(); },
+        trigger: section, start: 'top top', end: function () { return '+=' + (dist() * 1.6 + window.innerHeight * 0.6); },
         pin: true, scrub: 1, invalidateOnRefresh: true, refreshPriority: 2,
         onUpdate: function (s) { gsap.set(bar, { scaleX: s.progress }); }
       }
     });
+    tl.to({}, { duration: 0.18 })
+      .to(track, { x: function () { return -dist(); }, ease: 'none', duration: 1 })
+      .to({}, { duration: 0.12 });
     // Chaque carte : son dessin glisse un peu moins vite que la carte (profondeur)
-    track.querySelectorAll('.h-card').forEach(function (card) {
-      gsap.fromTo(card.querySelector('.h-card-ill'), { xPercent: 14 }, { xPercent: -14, ease: 'none',
-        scrollTrigger: { trigger: card, containerAnimation: move, start: 'left right', end: 'right left', scrub: true } });
+    // (dans la timeline, pour rester synchronisé avec la pause du début et de la fin)
+    track.querySelectorAll('.h-card-ill').forEach(function (ill, i, all) {
+      tl.fromTo(ill, { xPercent: 10 + i * 2 }, { xPercent: -10 - (all.length - i) * 2, ease: 'none', duration: 1 }, 0.18);
     });
     // Entrée des cartes quand la section arrive
     gsap.from(track.querySelectorAll('.h-card'), { y: 80, opacity: 0, duration: 1.1, ease: 'expo.out', stagger: 0.08,
@@ -115,7 +119,11 @@
     return function () { section.classList.remove('is-pinned'); };
   });
 
-  /* ── Après-midi : la démarche, épinglée ; une étape par tranche de défilement ── */
+  /* ── Après-midi : la démarche, épinglée. Chaque geste de molette = une étape, ni plus ni moins.
+     La section est découpée en n tranches ; chaque étape est posée au centre de sa tranche. Un geste (une rafale
+     d'événements de molette, inertie comprise) déplace d'une étape via Lenis ; le reste du geste est ignoré
+     (DJP.scrollGate). À la première étape vers le haut ou à la dernière vers le bas, la page reprend son cours.
+     Clavier, barre de défilement et tactile restent libres : l'étape affichée suit simplement la position. ── */
   mm.add('(min-width: 900px)', function () {
     var section = document.querySelector('.h-process');
     var steps = [].slice.call(section.querySelectorAll('.h-step'));
@@ -123,7 +131,9 @@
     var rail = section.querySelector('.h-rail span');
     var n = steps.length, cur = -1;
     section.classList.add('is-pinned');
-    var parts = steps.map(function (s) { return { t: lines(s.querySelector('.h-step-title')), p: s.querySelector('p') }; });
+    var parts = steps.map(function (s) {
+      return { t: lines(s.querySelector('.h-step-title')), rest: s.querySelectorAll('.h-step-chips, .h-step-desc, .h-step-dl > div') };
+    });
     steps.forEach(function (s, i) { gsap.set(s, { autoAlpha: i === 0 ? 1 : 0 }); });
     function go(i) {
       if (i === cur) return;
@@ -132,24 +142,54 @@
       if (prev > -1) {
         var o = parts[prev];
         gsap.to(o.t, { yPercent: -110, duration: 0.42, ease: 'power2.in', overwrite: true });
-        gsap.to(o.p, { opacity: 0, y: -12, duration: 0.32, ease: 'power2.in', overwrite: true,
+        gsap.to(o.rest, { opacity: 0, y: -12, duration: 0.32, ease: 'power2.in', stagger: 0.03, overwrite: true,
           onComplete: function () { if (cur !== prev) gsap.set(steps[prev], { autoAlpha: 0 }); } });
       }
       var c = parts[i];
       gsap.set(steps[i], { autoAlpha: 1 });
       gsap.fromTo(c.t, { yPercent: 110 }, { yPercent: 0, duration: 1.05, ease: 'expo.out', delay: prev > -1 ? 0.28 : 0, overwrite: true });
-      gsap.fromTo(c.p, { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.9, ease: 'expo.out', delay: prev > -1 ? 0.4 : 0.15, overwrite: true });
+      gsap.fromTo(c.rest, { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.9, ease: 'expo.out', stagger: 0.07, delay: prev > -1 ? 0.38 : 0.15, overwrite: true });
     }
     go(0);
-    ScrollTrigger.create({
-      trigger: section, start: 'top top', end: function () { return '+=' + (n * window.innerHeight * 0.7); },
-      pin: true, refreshPriority: 1,
+    var st = ScrollTrigger.create({
+      trigger: section, start: 'top top', end: function () { return '+=' + (n * window.innerHeight * 0.75); },
+      pin: '.h-process-pin', refreshPriority: 1,
       onUpdate: function (s) {
         gsap.set(rail, { scaleY: s.progress });
         go(Math.min(n - 1, Math.floor(s.progress * n)));
-      }
+      },
+      onEnter: function () { arrive(0); },
+      onEnterBack: function () { arrive(n - 1); }
     });
-    return function () { section.classList.remove('is-pinned'); steps.forEach(function (s) { gsap.set(s, { clearProps: 'all' }); }); };
+    function pos(i) { return st.start + (i + 0.5) / n * (st.end - st.start); }
+    var idx = 0, gesture = 0, consumed = -1, lastT = 0, prevAbs = 0;
+    var easeOut = function (t) { return 1 - Math.pow(2, -10 * t); };
+    var gliding = false;
+    function glide(i) {
+      idx = i; gliding = true;
+      setTimeout(function () { gliding = false; }, 1050);
+      if (DJP.lenis) DJP.lenis.scrollTo(pos(i), { duration: 0.95, easing: easeOut, force: true, onComplete: function () { gliding = false; } });
+      else window.scrollTo({ top: pos(i), behavior: 'smooth' });
+    }
+    function arrive(i) { if (!DJP.lenis) return; consumed = gesture; glide(i); }
+    DJP.scrollGate = function (d) {
+      var e = d && d.event;
+      if (!e || e.type !== 'wheel') return true;
+      var now = performance.now(), a = Math.abs(d.deltaY);
+      var fresh = now - lastT > 160 || (a > prevAbs * 1.6 && a > 12);
+      lastT = now; prevAbs = a;
+      if (fresh) gesture++;
+      if (consumed === gesture) return false;            // la fin d'un geste déjà utilisé
+      var y = DJP.lenis ? DJP.lenis.scroll : window.scrollY;
+      if (y < st.start - 2 || y > st.end + 2) return true; // hors de la section : défilement normal
+      if (!gliding) idx = Math.max(0, Math.min(n - 1, Math.floor(st.progress * n)));
+      var dir = d.deltaY > 0 ? 1 : -1, target = idx + dir;
+      if (target < 0 || target > n - 1) return true;      // on sort de la section dans le sens du geste
+      consumed = gesture;
+      glide(target);
+      return false;
+    };
+    return function () { DJP.scrollGate = null; section.classList.remove('is-pinned'); steps.forEach(function (s) { gsap.set(s, { clearProps: 'all' }); }); };
   });
 
   /* ── À propos : le portrait s'ouvre d'un cadre resserré, l'image glisse en parallaxe ── */

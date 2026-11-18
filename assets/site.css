@@ -376,3 +376,20 @@ html.veiled::after {
 .footer-giant .line-mask { display: block; overflow: hidden; padding-bottom: .05em; }
 .footer-giant .line-mask > span { display: block; }
 .footer-giant em { font-style: italic; color: var(--ciel); }
+
+/* Masques de ligne : marge intérieure pour que jambages, accents et italiques débordants ne soient pas rognés
+   (la marge négative garde l'interligne d'origine). */
+.line-mask, .js .line-mask, .h-title .line-mask, .veil-name .line-mask, .footer-giant .line-mask, .h-step .line-mask {
+  padding: .16em .14em .2em !important; margin: -.16em -.14em -.2em !important;
+}
+
+/* Page Réserver */
+.book h2 { margin-bottom: 2rem; }
+.book-list { list-style: none; display: grid; gap: 1rem; margin-bottom: 2.6rem; max-width: 34em; }
+.book-list li { padding-left: 1.6rem; position: relative; color: var(--texte); }
+.book-list li::before { content: ''; position: absolute; left: 0; top: .8em; width: 12px; height: 1px; background: var(--ambre); }
+.book-note { margin-top: 1rem; font-size: .85rem; color: var(--texte3); }
+.contact-aside dd a { text-decoration: none; border-bottom: 1px solid var(--ligne-fort); transition: border-color .4s var(--ease-out); }
+.contact-aside dd a:hover { border-color: var(--ambre); }
+.contact-aside dd { word-break: break-word; }
+.footer-contact { margin-top: 1.6rem; }

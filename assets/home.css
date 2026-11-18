@@ -119,3 +119,19 @@ html.sky-on body.has-sky { background: var(--nuage); }
 .h-dusk .eyebrow { justify-content: center; color: var(--encre); }
 .h-dusk-title { font-size: clamp(2.8rem, 8vw, 8rem); line-height: .95; letter-spacing: -.035em; max-width: 14ch; }
 .h-dusk .h-lede { margin: 2rem auto 2.8rem; text-align: center; }
+
+/* ── Démarche enrichie ── */
+.h-process-cta { margin-top: 2.6rem; }
+.h-step-chips { display: flex; flex-wrap: wrap; gap: .6rem; margin-bottom: 1.4rem; }
+.h-step-chips > span { font-size: .78rem; font-weight: 600; letter-spacing: .06em; padding: .4rem .8rem; border: 1px solid rgba(255,255,255,.22); color: var(--blanc); }
+.h-step-chips > span:first-child { border-color: var(--ambre-vif); }
+.h-step-desc { margin-bottom: 2rem; }
+.h-step-dl { display: grid; grid-template-columns: 1fr 1fr; gap: 1.6rem; padding-top: 1.6rem; border-top: 1px solid rgba(255,255,255,.14); }
+.h-step-dl dt { font-size: .72rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--ciel); margin-bottom: .5rem; }
+.h-step-dl dd { font-size: .98rem; color: #D5E2EC; line-height: 1.55; }
+.h-step .h-step-desc { font-size: clamp(1.05rem, 1.3vw, 1.2rem); color: #A9BCCB; max-width: 30em; }
+.h-pfaq { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.4rem; padding-top: clamp(3rem, 6vw, 5rem); padding-bottom: clamp(5rem, 9vw, 8rem); }
+.h-pfaq-item { border-top: 1px solid rgba(255,255,255,.18); padding-top: 1.4rem; }
+.h-pfaq-item h3 { color: var(--blanc); font-size: 1.35rem; margin-bottom: .7rem; }
+.h-pfaq-item p { color: #A9BCCB; font-size: .98rem; }
+@media (max-width: 860px) { .h-pfaq, .h-step-dl { grid-template-columns: 1fr; } }

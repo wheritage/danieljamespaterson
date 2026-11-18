@@ -10,8 +10,8 @@
   /* Tout ce qui reste à brancher se règle ici */
   var CONFIG = {
     web3formsKey: '',   // clé Web3Forms (courriel instantané à chaque demande) : https://web3forms.com
-    bookingUrl: '',     // lien Cal.com / Calendly de Daniel
-    email: ''           // courriel public de Daniel (repli si le formulaire n'est pas branché)
+    bookingUrl: 'https://bookings.cloud.microsoft/bookwithme/user/1d5a7ad95edf4c28bd1fdcfe008be4d1%40agc.ia.ca?anonymous&ismsaljsauthenabled',  // Microsoft Bookings de Daniel
+    email: 'danieljames.paterson@agc.ia.ca'  // courriel public de Daniel
   };
 
   var DJP = window.DJP = window.DJP || {};
@@ -49,6 +49,7 @@
       var on = b.getAttribute('data-l') === l;
       b.classList.toggle('on', on); b.setAttribute('aria-pressed', on);
     });
+    document.dispatchEvent(new CustomEvent('djp:lang', { detail: l }));
     if (hasGsap) ScrollTrigger.refresh();
   }
   DJP.setLang = setLang;
@@ -79,7 +80,10 @@
   function initSmoothScroll() {
     if (hasGsap) gsap.registerPlugin(ScrollTrigger);
     if (reduce || !window.Lenis || !hasGsap) return;
-    var lenis = DJP.lenis = new Lenis({ lerp: 0.09, wheelMultiplier: 0.9, stopInertiaOnNavigate: true });
+    // DJP.scrollGate(data) : une section peut ignorer des événements de molette (retourner false),
+    // p. ex. la démarche de l'accueil, qui avance d'une étape par geste.
+    var lenis = DJP.lenis = new Lenis({ lerp: 0.09, wheelMultiplier: 0.9, stopInertiaOnNavigate: true,
+      virtualScroll: function (d) { return !(DJP.scrollGate && DJP.scrollGate(d) === false); } });
     lenis.on('scroll', ScrollTrigger.update);
     gsap.ticker.add(function (t) { lenis.raf(t * 1000); });
     gsap.ticker.lagSmoothing(0);

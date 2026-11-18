@@ -50,10 +50,28 @@ continuous motion (its state is scroll + time of day), custom cursor (the only r
 cast/paint/bunshin). Sources and commits in `.claude/skills/SOURCES.md`. Workflow: direct (`motion-design`),
 style (`design-dna`), build (GSAP timeline, Three.js only for ambient), audit (genjutsu `_jutsu/tells/references/web.md`).
 
-## Wiring (`CONFIG` at the top of `assets/site.js`)
-- `web3formsKey`: contact form sends an email via Web3Forms. Empty = form shows "bientôt actif" (or mailto if `email` set).
-- `bookingUrl`: every `[data-booking]` link opens Daniel's calendar.
-- `email`: public email.
+## Contact and booking
+- Phone 514 795-0381, email danieljames.paterson@agc.ia.ca (footer, `/contact`, privacy page).
+- No form on the site: every « Réserver » link opens Daniel's Microsoft Bookings page (`CONFIG.bookingUrl` in
+  `assets/site.js`; `[data-booking]` links are rewritten to it, new tab). `/contact` is the booking page.
+  `initForm()` and `web3formsKey` stay dormant in case a form comes back.
+- Car and home quotes go to iA Auto and Home online quotes (`QUOTE_AUTO`, `QUOTE_HOME` in `tools/services_content.py`).
+
+## Service pages (generated)
+`tools/services_content.py` holds all copy (FR/EN) for the 7 services: assurance-vie, assurance-invalidite-maladies-graves,
+epargne-retraite (with the savings calculator, `assets/calc.js`), entrepreneurs, protection-hypothecaire, assurance-auto,
+assurance-habitation. `python3 tools/build-services.py` regenerates those pages, the shared footer on every page and
+`sitemap.xml`. Edit the content file, never the generated service HTML. Sections: hero, key points, how it works,
+(calculator), options, profiles (tabs, `assets/service.js`), FAQ (accordion), CTA, next service.
+Copy rules: no invented figures (only legal/public-program amounts: CELIAPP 8 000 $/40 000 $, SCEE 20 %/500 $,
+IQEE 10 %/250 $, RC auto minimum 50 000 $); never claim Daniel compares several insurers (iA career agency).
+
+## Home: pacing rules
+- Services track: pinned with a dwell at start and end, about 1.6 px of scroll per px of travel.
+- Process: one wheel gesture = one step, through `DJP.scrollGate` (Lenis `virtualScroll`), modelled on
+  `processus.html` in wheritage. At the first step going up or the last going down, the page scrolls on.
+  Keyboard, scrollbar and touch stay free.
+- Line masks get `.16em .14em .2em` padding with matching negative margins so ascenders, descenders and italics never clip.
 
 ## Pages
 `index`, `a-propos`, `contact` (form, `?sujet=vie|invalidite|epargne|entreprise|hypotheque` preselects the topic),
