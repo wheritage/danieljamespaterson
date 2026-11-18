@@ -55,6 +55,7 @@ FOOTER = f'''<footer class="footer">
         <ul>
           <li><a href="/">{bi("Accueil", "Home")}</a></li>
           <li><a href="/#demarche">{bi("Démarche", "Approach")}</a></li>
+          <li><a href="/profil">{bi("Profil en 60 secondes", "60-second profile")}</a></li>
           <li><a href="/a-propos">{bi("À propos", "About")}</a></li>
           <li><a href="/contact">{bi("Contact", "Contact")}</a></li>
           <li><a href="{BOOKING}" target="_blank" rel="noopener">{bi("Réserver un moment", "Book a time")}</a></li>
@@ -87,6 +88,7 @@ def page(s):
     pre = pre.replace('<link rel="stylesheet" href="/assets/site.css">', '<link rel="stylesheet" href="/assets/site.css">\n<link rel="stylesheet" href="/assets/service.css">')
     extra = '<script src="/assets/service.js" defer></script>'
     if s.get('calculator'): extra += '\n<script src="/assets/calc.js" defer></script>'
+    if s.get('needs'): extra += '\n<script src="/assets/needs.js" defer></script>'
     pre = pre.replace('<script src="/assets/site.js" defer></script>', '<script src="/assets/site.js" defer></script>\n' + extra)
 
     quote = s.get('quote')
@@ -95,7 +97,7 @@ def page(s):
                    f'<a class="btn btn--line" href="/contact" data-booking data-magnetic><span>{bi("Réserver un moment avec moi", "Book time with me")}</span></a>')
     else:
         actions = f'<a class="btn btn--primary" href="/contact" data-booking data-magnetic><span>{bi("Réserver un moment avec moi", "Book time with me")}</span>{ARROW}</a>'
-        if s.get('calculator'):
+        if s.get('calculator') or s.get('needs'):
             actions += f'<a class="btn btn--line" href="#calculateur" data-magnetic><span>{bi("Essayer le calculateur", "Try the calculator")}</span></a>'
 
     keys = ''.join(f'<div class="s-key" data-reveal><h3>{bi(a, b)}</h3><p>{bi(c, d)}</p></div>' for a, b, c, d in s['keys'])
@@ -123,6 +125,12 @@ def page(s):
       </div>
       <div class="calc" data-calc>
         <form class="calc-inputs" onsubmit="return false">
+          <div class="calc-field"><label>{bi("Ce que vous voulez savoir", "What you want to know")}</label>
+            <div class="calc-seg calc-seg--2" role="radiogroup" aria-label="Mode" data-aria-fr="Mode" data-aria-en="Mode">
+              <label><input type="radio" name="mode" value="project" checked><span>{bi("Combien j'aurai", "How much I'll have")}</span></label>
+              <label><input type="radio" name="mode" value="goal"><span>{bi("Combien mettre par mois", "How much to save monthly")}</span></label>
+            </div>
+          </div>
           <div class="calc-field"><label for="c-type">{bi("Compte", "Account")}</label>
             <div class="calc-seg" role="radiogroup" aria-label="Compte" data-aria-fr="Compte" data-aria-en="Account">
               <label><input type="radio" name="type" value="celi" checked><span>{bi("CELI", "TFSA")}</span></label>
@@ -131,14 +139,16 @@ def page(s):
             </div>
           </div>
           <div class="calc-field"><label for="c-init">{bi("Montant de départ", "Starting amount")}</label><div class="calc-num"><input id="c-init" name="init" type="number" min="0" step="500" value="5000" inputmode="numeric"><span>$</span></div></div>
-          <div class="calc-field"><label for="c-month">{bi("Cotisation mensuelle", "Monthly contribution")}</label><div class="calc-num"><input id="c-month" name="month" type="number" min="0" step="25" value="300" inputmode="numeric"><span>$</span></div></div>
+          <div class="calc-field" data-mode="goal" hidden><label for="c-goal">{bi("Votre objectif", "Your goal")}</label><div class="calc-num"><input id="c-goal" name="goal" type="number" min="0" step="1000" value="60000" inputmode="numeric"><span>$</span></div></div>
+          <div class="calc-field" data-mode="project"><label for="c-month">{bi("Cotisation mensuelle", "Monthly contribution")}</label><div class="calc-num"><input id="c-month" name="month" type="number" min="0" step="25" value="300" inputmode="numeric"><span>$</span></div></div>
           <div class="calc-field"><label for="c-years">{bi("Durée", "Time horizon")} <output data-out="years">20</output> {bi("ans", "years")}</label><input id="c-years" name="years" type="range" min="1" max="40" value="20"></div>
           <div class="calc-field"><label for="c-rate">{bi("Rendement annuel hypothétique", "Hypothetical annual return")} <output data-out="rate">5</output> %</label><input id="c-rate" name="rate" type="range" min="0" max="10" step="0.5" value="5"></div>
           <div class="calc-field" data-show="reer celiapp"><label for="c-tax">{bi("Votre taux marginal d'imposition", "Your marginal tax rate")} <output data-out="tax">37</output> %</label><input id="c-tax" name="tax" type="range" min="14" max="54" step="1" value="37"></div>
           <p class="calc-note" data-show="celiapp">{bi("Le CELIAPP est limité à 8 000 $ par année et 40 000 $ à vie : le calculateur plafonne les cotisations.", "The FHSA is capped at $8,000 a year and $40,000 lifetime: the calculator caps contributions.")}</p>
         </form>
         <div class="calc-out" aria-live="polite">
-          <div class="calc-total"><p>{bi("Valeur projetée", "Projected value")}</p><strong data-res="total">0 $</strong></div>
+          <div class="calc-total"><p><span data-mode="project">{bi("Valeur projetée", "Projected value")}</span><span data-mode="goal" hidden>{bi("Cotisation mensuelle nécessaire", "Monthly contribution needed")}</span></p><strong data-odo="big">0 $</strong></div>
+          <div class="calc-goal-total" data-mode="goal" hidden><p>{bi("Valeur atteinte", "Value reached")} : <b data-res="total">0 $</b></p></div>
           <dl class="calc-split">
             <div><dt><i class="sw sw-in"></i>{bi("Vos cotisations", "Your contributions")}</dt><dd data-res="contrib">0 $</dd></div>
             <div><dt><i class="sw sw-gr"></i>{bi("Croissance", "Growth")}</dt><dd data-res="growth">0 $</dd></div>
@@ -151,6 +161,41 @@ def page(s):
       </div>
     </div>
   </section>'''
+
+    if s.get('needs'):
+        def num(id_, name, fr, en, val, step=1000, minus=False):
+            return f'<div class="calc-field"><label for="n-{id_}">{"<i class=\"calc-minus\">−</i> " if minus else ""}{bi(fr, en)}</label><div class="calc-num"><input id="n-{id_}" name="{name}" type="number" min="0" step="{step}" value="{val}" inputmode="numeric"><span>$</span></div></div>'
+        calc = f"""
+  <section class="section s-calc" id="calculateur">
+    <div class="wrap">
+      <div class="section-head">
+        <div><p class="eyebrow">{bi("Calculateur", "Calculator")}</p><h2 data-split><span lang="fr">De combien d'assurance<br>avez-vous besoin ?</span><span lang="en">How much coverage<br>do you need?</span></h2></div>
+        <p class="lede" data-reveal>{bi("Une première estimation en une minute. Les montants de départ sont des exemples : remplacez-les par les vôtres.", "A first estimate in one minute. The starting amounts are examples: replace them with your own.")}</p>
+      </div>
+      <div class="calc" data-needs>
+        <form class="calc-inputs" onsubmit="return false">
+          <p class="calc-group">{bi("Ce qu'il faudrait couvrir", "What would need covering")}</p>
+          {num("inc", "income", "Revenu annuel à remplacer", "Annual income to replace", 65000)}
+          <div class="calc-field"><label for="n-pct">{bi("Part du revenu à remplacer", "Share of income to replace")} <output data-out="pct">70</output> %</label><input id="n-pct" name="pct" type="range" min="30" max="100" step="5" value="70"></div>
+          <div class="calc-field"><label for="n-yrs">{bi("Pendant", "For")} <output data-out="yrs">10</output> {bi("ans", "years")}</label><input id="n-yrs" name="yrs" type="range" min="0" max="25" value="10"></div>
+          {num("debt", "debt", "Hypothèque et dettes", "Mortgage and debts", 250000)}
+          {num("edu", "edu", "Études des enfants", "Children's education", 0, 5000)}
+          {num("fin", "fin", "Frais au décès (funérailles, succession)", "Final expenses (funeral, estate)", 15000)}
+          <p class="calc-group">{bi("Ce qui est déjà en place", "What is already in place")}</p>
+          {num("ins", "insured", "Assurance vie existante (travail et personnelle)", "Existing life insurance (work and personal)", 50000, minus=True)}
+          {num("sav", "savings", "Épargne et placements disponibles", "Available savings and investments", 20000, minus=True)}
+        </form>
+        <div class="calc-out" aria-live="polite">
+          <div class="calc-total"><p>{bi("Besoin estimé", "Estimated need")}</p><strong data-odo="big">0 $</strong></div>
+          <div class="needs-bar" data-bar aria-hidden="true"></div>
+          <dl class="needs-legend" data-legend></dl>
+          <p class="calc-explain" data-res="explain"></p>
+          <div><a class="btn btn--primary" href="/contact" data-booking data-magnetic><span>{bi("Valider ce montant avec Daniel", "Check this amount with Daniel")}</span>{ARROW}</a></div>
+          <p class="calc-disc">{bi("Estimation simplifiée à des fins d'illustration : elle ne tient compte ni de l'inflation, ni du rendement des sommes versées, ni de l'impôt au décès, ni des prestations gouvernementales. Le bon montant se valide lors d'une analyse complète.", "Simplified estimate for illustration: it does not account for inflation, returns on the money paid, tax at death or government benefits. The right amount is confirmed through a full analysis.")}</p>
+        </div>
+      </div>
+    </div>
+  </section>"""
 
     other = [x for x in SERVICES if x['slug'] != s['slug']]
     idx = SERVICES.index(s)
@@ -229,6 +274,39 @@ def page(s):
 '''
     return pre + main + FOOTER + '\n</body>\n</html>\n'
 
+def profil_page():
+    head = open(os.path.join(ROOT, 'a-propos.html')).read()
+    pre = head.split('<main id="main">')[0]
+    tf, te = 'Profil en 60 secondes | Daniel James Paterson', '60-second profile | Daniel James Paterson'
+    pre = re.sub(r'data-title-fr="[^"]*" data-title-en="[^"]*"', f'data-title-fr="{tf}" data-title-en="{te}"', pre)
+    pre = re.sub(r'<title>[^<]*</title>', f'<title>{tf}</title>', pre)
+    d = "Cinq questions pour savoir par où commencer : assurance vie, invalidité, épargne, hypothèque ou entreprise."
+    pre = re.sub(r'<meta name="description" content="[^"]*">', f'<meta name="description" content="{d}">', pre)
+    pre = re.sub(r'<meta property="og:description" content="[^"]*">', f'<meta property="og:description" content="{d}">', pre)
+    pre = re.sub(r'<meta property="og:title" content="[^"]*">', f'<meta property="og:title" content="{tf}">', pre)
+    pre = pre.replace(f'{SITE}/a-propos', f'{SITE}/profil').replace('data-page="a-propos"', 'data-page="profil"').replace(' aria-current="page"', '')
+    pre = pre.replace('<script src="/assets/site.js" defer></script>', '<script src="/assets/site.js" defer></script>\n<script src="/assets/profil.js" defer></script>')
+    main = f"""<main id="main">
+  <section class="page-hero qz-hero">
+    <div class="wrap">
+      <p class="eyebrow">{bi("Profil en 60 secondes", "60-second profile")}</p>
+      <h1 data-split><span lang="fr">Ce qu'il vous faut,<br><em>en cinq questions.</em></span><span lang="en">What you need,<br><em>in five questions.</em></span></h1>
+      <p class="lede" data-reveal>{bi("Répondez du bout des doigts : vous saurez par où commencer, et pourquoi. Aucune coordonnée demandée.", "Answer with a few taps: you will know where to start, and why. No contact details asked.")}</p>
+    </div>
+  </section>
+  <section class="section section--white qz-section">
+    <div class="wrap">
+      <div class="quiz" data-quiz>
+        <div class="qz-prog" aria-hidden="true"><span><i></i></span><span><i></i></span><span><i></i></span><span><i></i></span><span><i></i></span></div>
+        <p class="sr-only" aria-live="polite" data-live></p>
+        <div class="qz-stage" data-stage></div>
+      </div>
+    </div>
+  </section>
+</main>
+"""
+    return pre + main + FOOTER + '\n</body>\n</html>\n'
+
 def patch_footer(path):
     s = open(path).read()
     s = re.sub(r'<footer class="footer">.*?</footer>', lambda m: FOOTER, s, count=1, flags=re.S)
@@ -237,10 +315,11 @@ def patch_footer(path):
 if __name__ == '__main__':
     for s in SERVICES:
         open(os.path.join(ROOT, s['slug'] + '.html'), 'w').write(page(s))
+    open(os.path.join(ROOT, 'profil.html'), 'w').write(profil_page())
     for f in os.listdir(ROOT):
         if f.endswith('.html'): patch_footer(os.path.join(ROOT, f))
     # sitemap
-    urls = ['', 'a-propos', 'contact', 'confidentialite'] + [s['slug'] for s in SERVICES]
+    urls = ['', 'a-propos', 'profil', 'contact', 'confidentialite'] + [s['slug'] for s in SERVICES]
     sm = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + \
          ''.join(f'  <url><loc>{SITE}/{u}</loc></url>\n' for u in urls) + '</urlset>\n'
     open(os.path.join(ROOT, 'sitemap.xml'), 'w').write(sm)

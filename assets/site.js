@@ -164,7 +164,11 @@
         onEnter: function () { gsap.to(lines, { yPercent: 0, duration: 1.15, ease: 'expo.out', stagger: 0.08 }); } });
     });
     // Blocs : montée courte + fondu, en lot
-    ScrollTrigger.batch('[data-reveal]:not(.hero [data-reveal]):not(.page-hero [data-reveal])', {
+    // Paragraphes : ligne par ligne (revealLines)
+    document.querySelectorAll('p[data-reveal]:not(.hero p):not(.page-hero p)').forEach(function (p) {
+      ScrollTrigger.create({ trigger: p, start: 'top 88%', once: true, onEnter: function () { revealLines(p); } });
+    });
+    ScrollTrigger.batch('[data-reveal]:not(p):not(.hero [data-reveal]):not(.page-hero [data-reveal])', {
       start: 'top 88%', once: true,
       onEnter: function (batch) { gsap.fromTo(batch, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.9, ease: 'expo.out', stagger: 0.08, overwrite: true }); }
     });
@@ -195,7 +199,10 @@
     var eyebrow = hero.querySelector('.eyebrow');
     if (eyebrow) tl.from(eyebrow, { opacity: 0, y: 12, duration: 0.6 }, 0);
     hero.querySelectorAll('[data-split]').forEach(function (h, i) { tl.add(lineIn(h), 0.1 + i * 0.1); });
-    tl.fromTo(reveals, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.9, stagger: 0.09 }, 0.45);
+    var paras = [].filter.call(reveals, function (el) { return el.tagName === 'P'; });
+    var blocks = [].filter.call(reveals, function (el) { return el.tagName !== 'P'; });
+    paras.forEach(function (p, i) { gsap.set(p, { opacity: 0 }); tl.add(function () { revealLines(p); }, 0.45 + i * 0.1); });
+    if (blocks.length) tl.fromTo(blocks, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.9, stagger: 0.09 }, 0.6);
     if (wipes.length) tl.to(wipes, { clipPath: 'inset(0 0% 0 0)', duration: 1.4 }, 0.3);
     var horizon = hero.querySelector('.horizon');
     if (horizon) tl.from(horizon, { scaleX: 0, transformOrigin: 'left center', duration: 1.4 }, 0.5);
@@ -310,7 +317,7 @@
     if (first) veil.innerHTML = '<div><div class="veil-name"><span class="line-mask"><span>Daniel James</span></span><span class="line-mask"><span><em>Paterson</em></span></span></div><div class="veil-sun"></div></div>';
     document.body.appendChild(veil);
     html.classList.remove('veiled');
-    if (!hasGsap || reduce) { veil.classList.add('gone'); fireReady(); return; }
+    if (!hasGsap || reduce || html.classList.contains('vt-in')) { veil.classList.add('gone'); fireReady(); return; }
     lockScroll(true);
     var tl = gsap.timeline({ onComplete: function () { veil.classList.add('gone'); } });
     if (first) {
@@ -332,8 +339,10 @@
       onComplete: function () { location.href = url; } });
   }
 
+  // Transitions de vue entre documents (Chrome 126+, Safari 18.2+) ; sinon le rideau.
+  var VT = !reduce && typeof window.CSSViewTransitionRule !== 'undefined';
   function initTransitions() {
-    window.addEventListener('pageshow', function (e) { if (e.persisted && veil) { gsap.set(veil, { clipPath: 'inset(0% 0% 100% 0%)' }); veil.classList.add('gone'); } });
+    window.addEventListener('pageshow', function (e) { document.querySelectorAll('.h-card-art').forEach(function (a) { a.style.viewTransitionName = ''; }); if (e.persisted && veil) { gsap.set(veil, { clipPath: 'inset(0% 0% 100% 0%)' }); veil.classList.add('gone'); } });
     document.addEventListener('click', function (e) {
       if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
       var a = e.target.closest && e.target.closest('a[href]');
@@ -343,6 +352,16 @@
       if (url.origin !== location.origin) return;
       var norm = function (p) { return p.replace(/index(\.html)?$/, '').replace(/\.html$/, '').replace(/\/$/, '') || '/'; };
       if (norm(url.pathname) === norm(location.pathname) && url.search === location.search) return; // ancre : Lenis s'en charge
+      if (VT) {
+        // Transition de vue entre documents : le navigateur fige l'ancienne page et anime vers la nouvelle.
+        // La carte cliquée prête son illustration à l'en-tête de la page de service (view-transition-name: vt-art).
+        sstore('djp-vt', '1');
+        var cur = document.querySelector('.cursor'); if (cur) cur.classList.add('is-hidden');
+        var card = a.closest('.h-card, .s-next-in');
+        var art = card && card.querySelector('.h-card-art');
+        if (art) art.style.viewTransitionName = 'vt-art';
+        return;
+      }
       e.preventDefault();
       leaveTo(url.href);
     });
@@ -396,6 +415,141 @@
       onEnter: function () { gsap.to(lines, { yPercent: 0, duration: 1.3, ease: 'expo.out', stagger: 0.1 }); } });
   }
 
+  /* ── Paragraphes : les lignes montent hors d'un masque (SplitText), puis le texte est rendu tel quel ──
+     On ne découpe que la langue visible ; à la fin de l'animation, revert() remet le HTML d'origine, donc
+     le changement de langue ou de largeur n'a jamais de lignes figées à gérer. */
+  function revealLines(p, delay) {
+    p.style.opacity = 1;
+    if (!hasGsap || reduce || !window.SplitText) { if (hasGsap && !reduce) gsap.fromTo(p, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.9, ease: 'expo.out', delay: delay || 0 }); return; }
+    var host = p.querySelector(':scope > [lang="' + DJP.lang() + '"]') || p;
+    var split = SplitText.create(host, { type: 'lines', mask: 'lines', linesClass: 'sl' });
+    gsap.from(split.lines, { yPercent: 105, duration: 0.95, ease: 'expo.out', stagger: 0.07, delay: delay || 0,
+      onComplete: function () { split.revert(); } });
+  }
+  DJP.revealLines = revealLines;
+
+  /* ── Soulignement ambre tracé à la main sous l'expression clé de chaque page ──
+     Trait étiré (preserveAspectRatio none) : on le dévoile par un volet clip-path, jamais par stroke-dasharray. */
+  var SCRIBBLE = '<svg class="scribble-svg" viewBox="0 0 300 16" preserveAspectRatio="none" aria-hidden="true" focusable="false">' +
+    '<path d="M3 10.5 C 48 5, 104 3.5, 158 6 S 252 10.5, 297 5" /><path d="M42 14 C 110 10.5, 196 10, 262 12.5" /></svg>';
+  function initScribble() {
+    var els = document.querySelectorAll('.h-title em, .ab-hero h1 em, .s-hero h1 em, .qz-hero h1 em, [data-scribble]');
+    if (!els.length) return;
+    els.forEach(function (el) { el.classList.add('scribble'); el.insertAdjacentHTML('beforeend', SCRIBBLE); });
+    if (!hasGsap || reduce) { html.classList.add('scribble-static'); return; }
+    function draw(scope) {
+      gsap.fromTo(scope.querySelectorAll('.scribble-svg'), { clipPath: 'inset(0% 100% 0% 0%)' },
+        { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.1, ease: 'expo.out', stagger: 0.12 });
+    }
+    DJP.ready(function () {
+      var hero = document.querySelector('.h-hero, .page-hero');
+      if (hero && hero.querySelector('.scribble')) gsap.delayedCall(1.15, function () { draw(hero); });
+    });
+    document.querySelectorAll('[data-scribble]').forEach(function (el) {
+      if (el.closest('.h-hero, .page-hero')) return;
+      ScrollTrigger.create({ trigger: el, start: 'top 80%', once: true, onEnter: function () { draw(el.parentNode); } });
+    });
+  }
+
+  /* ── Chiffres qui roulent : chaque chiffre est une colonne 0-9 qui glisse jusqu'à sa valeur ── */
+  DJP.odometer = function (el, text) {
+    el.setAttribute('aria-label', text);
+    var chars = String(text).split('');
+    var sig = chars.map(function (c) { return /\d/.test(c) ? 'd' : c; }).join('');
+    if (el.__sig !== sig) {
+      el.__sig = sig;
+      el.innerHTML = '<span class="odo" aria-hidden="true">' + chars.map(function (c) {
+        return /\d/.test(c) ? '<span class="odo-col"><span class="odo-strip">0<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9</span></span>' : '<span class="odo-ch">' + (c === ' ' ? '&nbsp;' : c) + '</span>';
+      }).join('') + '</span>';
+    }
+    var strips = el.querySelectorAll('.odo-strip'), k = 0;
+    chars.forEach(function (c) {
+      if (!/\d/.test(c)) return;
+      var st = strips[k++], target = -parseInt(c, 10) * 10;
+      if (!hasGsap || reduce) st.style.transform = 'translateY(' + target + '%)';
+      else gsap.to(st, { yPercent: target, duration: 0.9, ease: 'expo.out', delay: (strips.length - k) * 0.025, overwrite: true });
+    });
+  };
+
+  /* ── Profondeur des illustrations : chaque calque glisse selon sa profondeur sous le pointeur ── */
+  function initDepth() {
+    if (reduce || !hasGsap || !window.matchMedia('(pointer: fine)').matches) return;
+    document.querySelectorAll('.h-card, .s-hero').forEach(function (zone) {
+      var svg = zone.querySelector('.ill');
+      if (!svg) return;
+      var layers = [].slice.call(svg.querySelectorAll('[data-depth]')).map(function (g) {
+        return { d: parseFloat(g.getAttribute('data-depth')), x: gsap.quickTo(g, 'x', { duration: 0.8, ease: 'expo.out' }), y: gsap.quickTo(g, 'y', { duration: 0.8, ease: 'expo.out' }) };
+      });
+      zone.addEventListener('pointermove', function (e) {
+        var r = zone.getBoundingClientRect(), dx = (e.clientX - r.left) / r.width - 0.5, dy = (e.clientY - r.top) / r.height - 0.5;
+        layers.forEach(function (l) { l.x(-dx * 22 * l.d); l.y(-dy * 12 * l.d); });
+      });
+      zone.addEventListener('pointerleave', function () { layers.forEach(function (l) { l.x(0); l.y(0); }); });
+    });
+  }
+
+  /* ── Barre de réservation : apparaît après un bon tiers de lecture, se range quand un autre appel
+     à réserver est à l'écran, et peut être fermée pour la session. ── */
+  function initPill() {
+    if (document.body.getAttribute('data-page') === 'contact' || sstore('djp-pill-off')) return;
+    var pill = document.createElement('div');
+    pill.className = 'book-pill';
+    pill.innerHTML = '<a href="/contact" data-booking><span class="bp-main"><span lang="fr">Réserver un moment</span><span lang="en">Book a time</span></span>' +
+      '<span class="bp-sub"><span lang="fr">20 min, sans engagement</span><span lang="en">20 min, no commitment</span></span>' +
+      '<svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 10h13M11 5l5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg></a>' +
+      '<button type="button" class="bp-close" data-aria-fr="Masquer" data-aria-en="Hide" aria-label="' + DJP.t('Masquer', 'Hide') + '"><span aria-hidden="true"></span></button>';
+    document.body.appendChild(pill);
+    if (hasGsap && !reduce) gsap.set(pill, { yPercent: 140 }); else pill.style.transform = 'translateY(140%)';
+    if (CONFIG.bookingUrl) { var a = pill.querySelector('a'); a.href = CONFIG.bookingUrl; a.target = '_blank'; a.rel = 'noopener'; }
+    var shown = false, progress = 0, blockers = 0, off = false;
+    function update() {
+      var want = !off && progress > 0.22 && blockers === 0;
+      if (want === shown) return;
+      shown = want;
+      pill.classList.toggle('on', want);
+      if (!hasGsap || reduce) { pill.style.transform = want ? 'none' : 'translateY(140%)'; return; }
+      if (want) gsap.fromTo(pill, { yPercent: 140 }, { yPercent: 0, duration: 0.7, ease: 'expo.out', overwrite: true });
+      else gsap.to(pill, { yPercent: 140, duration: 0.42, ease: 'power2.in', overwrite: true });
+    }
+    pill.querySelector('.bp-close').addEventListener('click', function () { off = true; sstore('djp-pill-off', '1'); update(); });
+    if (hasGsap) ScrollTrigger.create({ start: 0, end: 'max', onUpdate: function (s) { progress = s.progress; update(); } });
+    else window.addEventListener('scroll', function () { progress = scrollY / Math.max(1, document.documentElement.scrollHeight - innerHeight); update(); }, { passive: true });
+    var seen = new Set();
+    var io = new IntersectionObserver(function (en) {
+      en.forEach(function (x) { if (x.isIntersecting) seen.add(x.target); else seen.delete(x.target); });
+      blockers = seen.size; update();
+    }, { rootMargin: '0px 0px -10% 0px' });
+    document.querySelectorAll('.cta-band, .h-dusk, .footer, .h-hero, .page-hero, .h-process-cta, .quiz-band, .quiz').forEach(function (el) { io.observe(el); });
+  }
+
+  /* ── Portrait : un léger miroitement de chaleur qui se pose (une fois), comme l'air d'un soir d'été ──
+     Filtre SVG (turbulence + déplacement) dont l'intensité descend à zéro, puis le filtre est retiré. */
+  function initShimmer() {
+    if (reduce || !hasGsap) return;
+    var imgs = document.querySelectorAll('.h-portrait-img img, .ab-portrait img');
+    if (!imgs.length) return;
+    var NS = 'http://www.w3.org/2000/svg';
+    var defs = document.createElementNS(NS, 'svg');
+    defs.setAttribute('aria-hidden', 'true'); defs.setAttribute('width', '0'); defs.setAttribute('height', '0');
+    defs.style.position = 'absolute';
+    document.body.appendChild(defs);
+    imgs.forEach(function (img, i) {
+      var id = 'djp-shimmer-' + i;
+      defs.insertAdjacentHTML('beforeend', '<filter id="' + id + '" x="-5%" y="-5%" width="110%" height="110%">' +
+        '<feTurbulence type="fractalNoise" baseFrequency="0.006 0.035" numOctaves="2" seed="7" result="n"/>' +
+        '<feDisplacementMap in="SourceGraphic" in2="n" scale="0" xChannelSelector="R" yChannelSelector="G"/></filter>');
+      var f = defs.querySelector('#' + id), turb = f.querySelector('feTurbulence'), disp = f.querySelector('feDisplacementMap');
+      var st = { s: 38, fy: 0.035, o: 0.4 };
+      function apply() { disp.setAttribute('scale', st.s.toFixed(2)); turb.setAttribute('baseFrequency', '0.006 ' + st.fy.toFixed(4)); img.style.opacity = st.o; }
+      apply();
+      img.style.filter = 'url(#' + id + ')';
+      ScrollTrigger.create({ trigger: img, start: 'top 80%', once: true, onEnter: function () {
+        gsap.to(st, { s: 0, fy: 0.012, o: 1, duration: 2.2, ease: 'expo.out', onUpdate: apply,
+          onComplete: function () { img.style.filter = ''; } });
+      } });
+    });
+  }
+
   function boot() {
     initLang();
     initSmoothScroll();
@@ -404,6 +558,10 @@
     initCursor();
     initMagnetic();
     initFooterGiant();
+    initScribble();
+    initDepth();
+    initPill();
+    initShimmer();
     initMenu();
     initHeader();
     DJP.ready(initHero);

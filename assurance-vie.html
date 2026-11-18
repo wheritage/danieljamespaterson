@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script>(function(h){h.className='js veiled';try{var l=new URLSearchParams(location.search).get('lang')||localStorage.getItem('djp-lang');if(l==='en'){h.setAttribute('data-lang','en');h.lang='en'}}catch(e){}if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)h.className+=' reduce'})(document.documentElement)</script>
+<script>(function(h){var c='js',vt=false;try{vt=sessionStorage.getItem('djp-vt')==='1';sessionStorage.removeItem('djp-vt')}catch(e){}c+=vt?' vt-in':' veiled';try{var q=new URLSearchParams(location.search),l=q.get('lang')||localStorage.getItem('djp-lang');if(l==='en'){h.setAttribute('data-lang','en');h.lang='en'}var hr=q.has('hour')?+q.get('hour'):new Date().getHours();h.setAttribute('data-hour',hr);if(hr>=20||hr<5)c+=' sky-night'}catch(e){}if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)c+=' reduce';h.className=c})(document.documentElement)</script>
 <title>Assurance vie | Daniel James Paterson</title>
 <meta name="description" content="L'assurance vie verse une somme libre d'impôt à vos proches à votre décès. Bien choisie, elle remplace votre revenu, efface les dettes et transmet votre patrimoine comme vous l'avez prévu.">
 <link rel="canonical" href="https://danieljamespaterson.vercel.app/assurance-vie">
@@ -24,8 +24,10 @@
 <script src="/assets/vendor/lenis.min.js" defer></script>
 <script src="/assets/vendor/gsap.min.js" defer></script>
 <script src="/assets/vendor/ScrollTrigger.min.js" defer></script>
+<script src="/assets/vendor/SplitText.min.js" defer></script>
 <script src="/assets/site.js" defer></script>
 <script src="/assets/service.js" defer></script>
+<script src="/assets/needs.js" defer></script>
 </head>
 <body data-page="service" data-service="vie">
 <a class="skip" href="#main"><span lang="fr">Aller au contenu</span><span lang="en">Skip to content</span></a>
@@ -52,7 +54,7 @@
         <p class="eyebrow"><a href="/#services">Services</a></p>
         <h1 data-split><span lang="fr">Protéger les vôtres,<br><em>quoi qu'il arrive.</em></span><span lang="en">Protect your family,<br><em>whatever happens.</em></span></h1>
         <p class="lede" data-reveal><span lang="fr">L'assurance vie verse une somme libre d'impôt à vos proches à votre décès. Bien choisie, elle remplace votre revenu, efface les dettes et transmet votre patrimoine comme vous l'avez prévu.</span><span lang="en">Life insurance pays a tax-free sum to your loved ones when you die. Chosen well, it replaces your income, clears debts and passes on your estate the way you planned.</span></p>
-        <div class="hero-actions" data-reveal><a class="btn btn--primary" href="/contact" data-booking data-magnetic><span><span lang="fr">Réserver un moment avec moi</span><span lang="en">Book time with me</span></span><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 10h13M11 5l5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg></a></div>
+        <div class="hero-actions" data-reveal><a class="btn btn--primary" href="/contact" data-booking data-magnetic><span><span lang="fr">Réserver un moment avec moi</span><span lang="en">Book time with me</span></span><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 10h13M11 5l5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg></a><a class="btn btn--line" href="#calculateur" data-magnetic><span><span lang="fr">Essayer le calculateur</span><span lang="en">Try the calculator</span></span></a></div>
       </div>
       <div class="s-hero-ill wipe" aria-hidden="true"><svg class="ill" viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
 <defs>
@@ -61,13 +63,13 @@
 <pattern id="hatch-hero-vie" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="5" stroke="#13283B" stroke-width=".7" stroke-opacity=".28"/></pattern>
 </defs>
 <rect width="320" height="240" fill="url(#sky-hero-vie)"/>
-<g stroke="#FFFFFF" stroke-width="1.2" stroke-linecap="square" opacity=".9">
+<g data-depth=".35" stroke="#FFFFFF" stroke-width="1.2" stroke-linecap="square" opacity=".9">
 <line x1="24" y1="52" x2="96" y2="52"/><line x1="40" y1="60" x2="78" y2="60"/><line x1="196" y1="84" x2="290" y2="84"/><line x1="222" y1="92" x2="268" y2="92"/>
 </g>
 
 <line x1="0" y1="200.5" x2="320" y2="200.5" stroke="#13283B" stroke-opacity=".35"/>
 <rect x="0" y="201" width="320" height="39" fill="url(#hatch-hero-vie)" opacity=".55"/>
-
+<g data-depth="1">
 <path d="M84 200 V138 A76 76 0 0 1 236 138 V200" fill="#FFFFFF" stroke="#13283B" stroke-width="1.5"/>
 <path d="M98 200 V140 A62 62 0 0 1 222 140 V200" fill="none" stroke="#13283B" stroke-opacity=".35"/>
 <path d="M84 138 A76 76 0 0 1 236 138 L222 140 A62 62 0 0 0 98 140 Z" fill="url(#deep-hero-vie)"/>
@@ -76,7 +78,7 @@
 <rect x="180" y="158" width="22" height="42" fill="#1F6E9C"/>
 <rect x="118" y="146" width="22" height="54" fill="url(#hatch-hero-vie)" opacity=".5"/>
 <line x1="70" y1="200" x2="250" y2="200" stroke="#13283B" stroke-width="2"/>
-<rect x="155" y="104" width="10" height="10" fill="#B8452C"/>
+</g><g data-depth="1.6"><rect x="155" y="104" width="10" height="10" fill="#B8452C"/></g>
 </svg></div>
     </div>
   </section>
@@ -94,6 +96,36 @@
     </div>
   </section>
 
+  <section class="section s-calc" id="calculateur">
+    <div class="wrap">
+      <div class="section-head">
+        <div><p class="eyebrow"><span lang="fr">Calculateur</span><span lang="en">Calculator</span></p><h2 data-split><span lang="fr">De combien d'assurance<br>avez-vous besoin ?</span><span lang="en">How much coverage<br>do you need?</span></h2></div>
+        <p class="lede" data-reveal><span lang="fr">Une première estimation en une minute. Les montants de départ sont des exemples : remplacez-les par les vôtres.</span><span lang="en">A first estimate in one minute. The starting amounts are examples: replace them with your own.</span></p>
+      </div>
+      <div class="calc" data-needs>
+        <form class="calc-inputs" onsubmit="return false">
+          <p class="calc-group"><span lang="fr">Ce qu'il faudrait couvrir</span><span lang="en">What would need covering</span></p>
+          <div class="calc-field"><label for="n-inc"><span lang="fr">Revenu annuel à remplacer</span><span lang="en">Annual income to replace</span></label><div class="calc-num"><input id="n-inc" name="income" type="number" min="0" step="1000" value="65000" inputmode="numeric"><span>$</span></div></div>
+          <div class="calc-field"><label for="n-pct"><span lang="fr">Part du revenu à remplacer</span><span lang="en">Share of income to replace</span> <output data-out="pct">70</output> %</label><input id="n-pct" name="pct" type="range" min="30" max="100" step="5" value="70"></div>
+          <div class="calc-field"><label for="n-yrs"><span lang="fr">Pendant</span><span lang="en">For</span> <output data-out="yrs">10</output> <span lang="fr">ans</span><span lang="en">years</span></label><input id="n-yrs" name="yrs" type="range" min="0" max="25" value="10"></div>
+          <div class="calc-field"><label for="n-debt"><span lang="fr">Hypothèque et dettes</span><span lang="en">Mortgage and debts</span></label><div class="calc-num"><input id="n-debt" name="debt" type="number" min="0" step="1000" value="250000" inputmode="numeric"><span>$</span></div></div>
+          <div class="calc-field"><label for="n-edu"><span lang="fr">Études des enfants</span><span lang="en">Children's education</span></label><div class="calc-num"><input id="n-edu" name="edu" type="number" min="0" step="5000" value="0" inputmode="numeric"><span>$</span></div></div>
+          <div class="calc-field"><label for="n-fin"><span lang="fr">Frais au décès (funérailles, succession)</span><span lang="en">Final expenses (funeral, estate)</span></label><div class="calc-num"><input id="n-fin" name="fin" type="number" min="0" step="1000" value="15000" inputmode="numeric"><span>$</span></div></div>
+          <p class="calc-group"><span lang="fr">Ce qui est déjà en place</span><span lang="en">What is already in place</span></p>
+          <div class="calc-field"><label for="n-ins"><i class="calc-minus">−</i> <span lang="fr">Assurance vie existante (travail et personnelle)</span><span lang="en">Existing life insurance (work and personal)</span></label><div class="calc-num"><input id="n-ins" name="insured" type="number" min="0" step="1000" value="50000" inputmode="numeric"><span>$</span></div></div>
+          <div class="calc-field"><label for="n-sav"><i class="calc-minus">−</i> <span lang="fr">Épargne et placements disponibles</span><span lang="en">Available savings and investments</span></label><div class="calc-num"><input id="n-sav" name="savings" type="number" min="0" step="1000" value="20000" inputmode="numeric"><span>$</span></div></div>
+        </form>
+        <div class="calc-out" aria-live="polite">
+          <div class="calc-total"><p><span lang="fr">Besoin estimé</span><span lang="en">Estimated need</span></p><strong data-odo="big">0 $</strong></div>
+          <div class="needs-bar" data-bar aria-hidden="true"></div>
+          <dl class="needs-legend" data-legend></dl>
+          <p class="calc-explain" data-res="explain"></p>
+          <div><a class="btn btn--primary" href="/contact" data-booking data-magnetic><span><span lang="fr">Valider ce montant avec Daniel</span><span lang="en">Check this amount with Daniel</span></span><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 10h13M11 5l5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg></a></div>
+          <p class="calc-disc"><span lang="fr">Estimation simplifiée à des fins d'illustration : elle ne tient compte ni de l'inflation, ni du rendement des sommes versées, ni de l'impôt au décès, ni des prestations gouvernementales. Le bon montant se valide lors d'une analyse complète.</span><span lang="en">Simplified estimate for illustration: it does not account for inflation, returns on the money paid, tax at death or government benefits. The right amount is confirmed through a full analysis.</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
   <section class="section">
     <div class="wrap">
       <div class="section-head">
@@ -183,6 +215,7 @@
         <ul>
           <li><a href="/"><span lang="fr">Accueil</span><span lang="en">Home</span></a></li>
           <li><a href="/#demarche"><span lang="fr">Démarche</span><span lang="en">Approach</span></a></li>
+          <li><a href="/profil"><span lang="fr">Profil en 60 secondes</span><span lang="en">60-second profile</span></a></li>
           <li><a href="/a-propos"><span lang="fr">À propos</span><span lang="en">About</span></a></li>
           <li><a href="/contact"><span lang="fr">Contact</span><span lang="en">Contact</span></a></li>
           <li><a href="https://bookings.cloud.microsoft/bookwithme/user/1d5a7ad95edf4c28bd1fdcfe008be4d1%40agc.ia.ca?anonymous&ismsaljsauthenabled" target="_blank" rel="noopener"><span lang="fr">Réserver un moment</span><span lang="en">Book a time</span></a></li>

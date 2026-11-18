@@ -136,3 +136,13 @@ html.sky-on body.has-sky { background: var(--nuage); }
 .h-pfaq-item h3 { color: var(--blanc); font-size: 1.35rem; margin-bottom: .7rem; }
 .h-pfaq-item p { color: #A9BCCB; font-size: .98rem; }
 @media (max-width: 860px) { .h-pfaq, .h-step-dl { grid-template-columns: 1fr; } }
+
+/* Bandeau « Profil en 60 secondes » posé sur le ciel */
+.quiz-band { padding: clamp(3rem, 7vw, 6rem) 0; }
+.quiz-band-in { display: grid; grid-template-columns: 1fr auto; grid-template-areas: "eye eye" "title btn"; gap: 1rem 3rem; align-items: end; padding: clamp(2rem, 4vw, 3.4rem); background: var(--blanc); text-decoration: none; color: var(--encre); border: 1px solid rgba(19,40,59,.08); transition: background-color .6s var(--ease-out); }
+.quiz-band-in .eyebrow { grid-area: eye; margin-bottom: 0; }
+.quiz-band-title { grid-area: title; font-family: var(--serif); font-size: clamp(1.8rem, 3.6vw, 3.2rem); line-height: 1.08; letter-spacing: -.02em; }
+.quiz-band-title em { font-style: italic; color: var(--ciel-fonce); }
+.quiz-band-in .btn { grid-area: btn; }
+.quiz-band-in:hover { background: var(--nuage); }
+@media (max-width: 760px) { .quiz-band-in { grid-template-columns: 1fr; grid-template-areas: "eye" "title" "btn"; } .quiz-band-in .btn { justify-self: start; } }

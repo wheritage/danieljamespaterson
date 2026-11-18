@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script>(function(h){h.className='js veiled';try{var l=new URLSearchParams(location.search).get('lang')||localStorage.getItem('djp-lang');if(l==='en'){h.setAttribute('data-lang','en');h.lang='en'}}catch(e){}if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)h.className+=' reduce'})(document.documentElement)</script>
+<script>(function(h){var c='js',vt=false;try{vt=sessionStorage.getItem('djp-vt')==='1';sessionStorage.removeItem('djp-vt')}catch(e){}c+=vt?' vt-in':' veiled';try{var q=new URLSearchParams(location.search),l=q.get('lang')||localStorage.getItem('djp-lang');if(l==='en'){h.setAttribute('data-lang','en');h.lang='en'}var hr=q.has('hour')?+q.get('hour'):new Date().getHours();h.setAttribute('data-hour',hr);if(hr>=20||hr<5)c+=' sky-night'}catch(e){}if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)c+=' reduce';h.className=c})(document.documentElement)</script>
 <title>Page introuvable | Daniel James Paterson</title>
 <meta name="description" content="Page introuvable.">
 <meta name="robots" content="noindex">
@@ -24,7 +24,9 @@
 <script src="/assets/vendor/lenis.min.js" defer></script>
 <script src="/assets/vendor/gsap.min.js" defer></script>
 <script src="/assets/vendor/ScrollTrigger.min.js" defer></script>
+<script src="/assets/vendor/SplitText.min.js" defer></script>
 <script src="/assets/site.js" defer></script>
+<script src="/assets/clouds404.js" defer></script>
 </head>
 <body data-page="404">
 <a class="skip" href="#main"><span lang="fr">Aller au contenu</span><span lang="en">Skip to content</span></a>
@@ -45,10 +47,12 @@
 </div>
 
 <main id="main" class="notfound">
-  <div>
+  <canvas class="nf-clouds" aria-hidden="true"></canvas>
+  <div class="nf-in">
     <p class="eyebrow" style="justify-content:center">404</p>
     <h1><span lang="fr">Cette page s'est perdue<br>dans les nuages.</span><span lang="en">This page got lost<br>in the clouds.</span></h1>
-    <a class="btn btn--primary" href="/"><span lang="fr">Retour à l'accueil</span><span lang="en">Back to home</span> <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 10h13M11 5l5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg></a>
+    <p class="nf-tip"><span lang="fr">Poussez les nuages du bout de la souris ou du doigt.</span><span lang="en">Push the clouds with your mouse or finger.</span></p>
+    <a class="btn btn--primary" href="/" data-magnetic><span lang="fr">Retour à l'accueil</span><span lang="en">Back to home</span> <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 10h13M11 5l5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg></a>
   </div>
 </main>
 <footer class="footer">
@@ -71,6 +75,7 @@
         <ul>
           <li><a href="/"><span lang="fr">Accueil</span><span lang="en">Home</span></a></li>
           <li><a href="/#demarche"><span lang="fr">Démarche</span><span lang="en">Approach</span></a></li>
+          <li><a href="/profil"><span lang="fr">Profil en 60 secondes</span><span lang="en">60-second profile</span></a></li>
           <li><a href="/a-propos"><span lang="fr">À propos</span><span lang="en">About</span></a></li>
           <li><a href="/contact"><span lang="fr">Contact</span><span lang="en">Contact</span></a></li>
           <li><a href="https://bookings.cloud.microsoft/bookwithme/user/1d5a7ad95edf4c28bd1fdcfe008be4d1%40agc.ia.ca?anonymous&ismsaljsauthenabled" target="_blank" rel="noopener"><span lang="fr">Réserver un moment</span><span lang="en">Book a time</span></a></li>

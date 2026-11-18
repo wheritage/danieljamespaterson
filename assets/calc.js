@@ -25,11 +25,20 @@
     return en ? '$' + s : s.replace('.', ',') + ' $';
   }
   function val(name) { var el = form.elements[name]; return Math.max(0, parseFloat(el.value) || 0); }
+  function mode() { var c = form.querySelector('input[name="mode"]:checked'); return c ? c.value : 'project'; }
   function type() { var c = form.querySelector('input[name="type"]:checked'); return c ? c.value : 'celi'; }
 
+  // Mode objectif : cotisation mensuelle M telle que init·(1+i)^n + M·((1+i)^n − 1)/i = objectif (i mensuel)
+  function needed(init, goal, years, rate) {
+    var n = years * 12, i = rate / 12, g = Math.pow(1 + i, n);
+    var m = i === 0 ? (goal - init) / n : (goal - init * g) * i / (g - 1);
+    return Math.max(0, m);
+  }
   function compute() {
-    var t = type(), init = val('init'), month = val('month'), years = Math.round(val('years')) || 1;
+    var t = type(), init = val('init'), years = Math.round(val('years')) || 1;
     var rate = val('rate') / 100, tax = val('tax') / 100;
+    var goalMode = mode() === 'goal';
+    var month = goalMode ? needed(t === 'celiapp' ? Math.min(init, 8000) : init, val('goal'), years, rate) : val('month');
     var capYear = Infinity, capLife = Infinity;
     if (t === 'celiapp') { capYear = 8000; capLife = 40000; }
     var lifetime = Math.min(init, capLife, capYear);
@@ -47,7 +56,7 @@
       }
       rows.push({ year: y, value: v, contrib: contrib });
     }
-    return { t: t, years: years, total: v, contrib: contrib, growth: v - contrib, refund: refund, rows: rows, capped: t === 'celiapp' && contrib >= capLife - 0.5 };
+    return { t: t, goalMode: goalMode, month: month, goal: val('goal'), years: years, total: v, contrib: contrib, growth: v - contrib, refund: refund, rows: rows, capped: t === 'celiapp' && contrib >= capLife - 0.5 };
   }
 
   var drawn = false;
@@ -90,6 +99,10 @@
   function render() {
     var res = compute();
     root.querySelectorAll('[data-show]').forEach(function (el) { el.hidden = el.getAttribute('data-show').split(' ').indexOf(res.t) < 0; });
+    root.querySelectorAll('[data-mode]').forEach(function (el) { el.hidden = el.getAttribute('data-mode') !== (res.goalMode ? 'goal' : 'project'); });
+    var big = root.querySelector('[data-odo="big"]');
+    var bigText = money(res.goalMode ? res.month : res.total);
+    if (DJP.odometer) DJP.odometer(big, bigText); else big.textContent = bigText;
     root.querySelector('[data-out="years"]').textContent = res.years;
     root.querySelector('[data-out="rate"]').textContent = String(val('rate')).replace('.', lang() === 'en' ? '.' : ',');
     root.querySelector('[data-out="tax"]').textContent = Math.round(val('tax'));
@@ -101,6 +114,12 @@
     if (res.t === 'celi') ex = en ? 'In a TFSA, growth and withdrawals are not taxed: the projected amount is yours to withdraw.' : "Dans un CELI, la croissance et les retraits ne sont pas imposés : le montant projeté peut être retiré tel quel.";
     else if (res.t === 'reer') ex = en ? 'In an RRSP, each contribution generates a tax refund now; withdrawals will be taxed, ideally at a lower rate in retirement.' : "Dans un REER, chaque cotisation génère un remboursement d'impôt maintenant ; les retraits seront imposés, idéalement à un taux plus bas à la retraite.";
     else ex = (en ? 'The FHSA combines a deduction now and a tax-free withdrawal for a first home.' : "Le CELIAPP combine une déduction maintenant et un retrait non imposé pour une première propriété.") + (res.capped ? (en ? ' The lifetime $40,000 limit is reached in this scenario.' : ' Le plafond à vie de 40 000 $ est atteint dans ce scénario.') : '');
+    if (res.goalMode) {
+      var short = res.total < res.goal - 1;
+      ex = (en ? 'To reach ' + money(res.goal) + ' in ' + res.years + ' years at ' + val('rate') + '%, set aside about ' + money(res.month) + ' a month. '
+               : 'Pour atteindre ' + money(res.goal) + ' en ' + res.years + ' ans à ' + String(val('rate')).replace('.', ',') + ' %, prévoyez environ ' + money(res.month) + ' par mois. ')
+         + (short ? (en ? 'The FHSA limits stop you short of the goal: another account (TFSA, RRSP) would carry the rest.' : "Les plafonds du CELIAPP ne permettent pas d'atteindre l'objectif : un autre compte (CELI, REER) prendrait le relais.") : ex);
+    }
     root.querySelector('[data-res="explain"]').textContent = ex;
     chart(res);
   }

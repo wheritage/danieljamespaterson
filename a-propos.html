@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script>(function(h){h.className='js veiled';try{var l=new URLSearchParams(location.search).get('lang')||localStorage.getItem('djp-lang');if(l==='en'){h.setAttribute('data-lang','en');h.lang='en'}}catch(e){}if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)h.className+=' reduce'})(document.documentElement)</script>
+<script>(function(h){var c='js',vt=false;try{vt=sessionStorage.getItem('djp-vt')==='1';sessionStorage.removeItem('djp-vt')}catch(e){}c+=vt?' vt-in':' veiled';try{var q=new URLSearchParams(location.search),l=q.get('lang')||localStorage.getItem('djp-lang');if(l==='en'){h.setAttribute('data-lang','en');h.lang='en'}var hr=q.has('hour')?+q.get('hour'):new Date().getHours();h.setAttribute('data-hour',hr);if(hr>=20||hr<5)c+=' sky-night'}catch(e){}if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)c+=' reduce';h.className=c})(document.documentElement)</script>
 <title>Daniel James Paterson, éducateur financier | À propos</title>
 <meta name="description" content="Daniel James Paterson, conseiller en sécurité financière de l'Ouest-de-l'Île de Montréal : créer, protéger et préserver le patrimoine des familles, des entreprises et des particuliers.">
 <link rel="canonical" href="https://danieljamespaterson.vercel.app/a-propos">
@@ -23,6 +23,7 @@
 <script src="/assets/vendor/lenis.min.js" defer></script>
 <script src="/assets/vendor/gsap.min.js" defer></script>
 <script src="/assets/vendor/ScrollTrigger.min.js" defer></script>
+<script src="/assets/vendor/SplitText.min.js" defer></script>
 <script src="/assets/site.js" defer></script>
 </head>
 <body data-page="a-propos">
@@ -125,6 +126,7 @@
         <ul>
           <li><a href="/"><span lang="fr">Accueil</span><span lang="en">Home</span></a></li>
           <li><a href="/#demarche"><span lang="fr">Démarche</span><span lang="en">Approach</span></a></li>
+          <li><a href="/profil"><span lang="fr">Profil en 60 secondes</span><span lang="en">60-second profile</span></a></li>
           <li><a href="/a-propos"><span lang="fr">À propos</span><span lang="en">About</span></a></li>
           <li><a href="/contact"><span lang="fr">Contact</span><span lang="en">Contact</span></a></li>
           <li><a href="https://bookings.cloud.microsoft/bookwithme/user/1d5a7ad95edf4c28bd1fdcfe008be4d1%40agc.ia.ca?anonymous&ismsaljsauthenabled" target="_blank" rel="noopener"><span lang="fr">Réserver un moment</span><span lang="en">Book a time</span></a></li>

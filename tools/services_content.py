@@ -7,7 +7,7 @@ QUOTE_HOME = 'https://insurance.ia.ca/home-quotes/?uid=ioad0w&redirect=false'
 
 SERVICES = [
 {
- 'slug': 'assurance-vie', 'key': 'vie', 'ill': 'vie',
+ 'slug': 'assurance-vie', 'key': 'vie', 'ill': 'vie', 'needs': True,
  'name': ('Assurance vie', 'Life insurance'),
  'title': ('Protéger les vôtres,<br><em>quoi qu\'il arrive.</em>', 'Protect your family,<br><em>whatever happens.</em>'),
  'lede': ("L'assurance vie verse une somme libre d'impôt à vos proches à votre décès. Bien choisie, elle remplace votre revenu, efface les dettes et transmet votre patrimoine comme vous l'avez prévu.",

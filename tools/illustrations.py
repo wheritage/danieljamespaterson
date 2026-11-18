@@ -6,6 +6,16 @@ illustration(key, uid) renvoie un <svg> autonome ; uid rend les id (dégradés, 
 INK, DEEP, SKY, PALE, WHITE, AMBER = '#13283B', '#1F6E9C', '#7EC3E6', '#CFE8F6', '#FFFFFF', '#B8452C'
 
 
+def layered(body):
+    """Calques pour la profondeur au pointeur : le sujet (1), ses détails ambre en avant (1.6)."""
+    import re
+    amber = re.findall(r'<rect [^>]*fill="#B8452C"[^>]*/>', body)
+    for a in amber:
+        body = body.replace(a, '', 1)
+    front = f'<g data-depth="1.6">{"".join(amber)}</g>' if amber else ''
+    return f'<g data-depth="1">{body}</g>{front}'
+
+
 def frame(uid, body, sun=None):
     sun_el = f'<rect x="{sun[0]}" y="{sun[1]}" width="14" height="14" fill="{AMBER}"/>' if sun else ''
     return f'''<svg class="ill" viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
@@ -15,13 +25,13 @@ def frame(uid, body, sun=None):
 <pattern id="hatch-{uid}" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="5" stroke="{INK}" stroke-width=".7" stroke-opacity=".28"/></pattern>
 </defs>
 <rect width="320" height="240" fill="url(#sky-{uid})"/>
-<g stroke="{WHITE}" stroke-width="1.2" stroke-linecap="square" opacity=".9">
+<g data-depth=".35" stroke="{WHITE}" stroke-width="1.2" stroke-linecap="square" opacity=".9">
 <line x1="24" y1="52" x2="96" y2="52"/><line x1="40" y1="60" x2="78" y2="60"/><line x1="196" y1="84" x2="290" y2="84"/><line x1="222" y1="92" x2="268" y2="92"/>
 </g>
 {sun_el}
 <line x1="0" y1="200.5" x2="320" y2="200.5" stroke="{INK}" stroke-opacity=".35"/>
 <rect x="0" y="201" width="320" height="39" fill="url(#hatch-{uid})" opacity=".55"/>
-{body}
+{layered(body)}
 </svg>'''
 
 

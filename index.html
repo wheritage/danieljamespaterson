@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script>(function(h){h.className='js veiled';try{var l=new URLSearchParams(location.search).get('lang')||localStorage.getItem('djp-lang');if(l==='en'){h.setAttribute('data-lang','en');h.lang='en'}}catch(e){}if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)h.className+=' reduce'})(document.documentElement)</script>
+<script>(function(h){var c='js',vt=false;try{vt=sessionStorage.getItem('djp-vt')==='1';sessionStorage.removeItem('djp-vt')}catch(e){}c+=vt?' vt-in':' veiled';try{var q=new URLSearchParams(location.search),l=q.get('lang')||localStorage.getItem('djp-lang');if(l==='en'){h.setAttribute('data-lang','en');h.lang='en'}var hr=q.has('hour')?+q.get('hour'):new Date().getHours();h.setAttribute('data-hour',hr);if(hr>=20||hr<5)c+=' sky-night'}catch(e){}if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)c+=' reduce';h.className=c})(document.documentElement)</script>
 <title>Daniel James Paterson, conseiller en sécurité financière</title>
 <meta name="description" content="Assurance vie, invalidité, épargne et planification expliquées simplement. Prenez rendez-vous avec Daniel James Paterson.">
 <link rel="canonical" href="https://danieljamespaterson.vercel.app/">
@@ -24,6 +24,7 @@
 <script src="/assets/vendor/lenis.min.js" defer></script>
 <script src="/assets/vendor/gsap.min.js" defer></script>
 <script src="/assets/vendor/ScrollTrigger.min.js" defer></script>
+<script src="/assets/vendor/SplitText.min.js" defer></script>
 <script src="/assets/site.js" defer></script>
 <script src="/assets/sky.js" defer></script>
 <script src="/assets/home.js" defer></script>
@@ -36,7 +37,7 @@
     <nav aria-label="Principale"><ul class="nav-links"><li><a href="/" aria-current="page"><span lang="fr">Accueil</span><span lang="en">Home</span></a></li><li><a href="/#services"><span lang="fr">Services</span><span lang="en">Services</span></a></li><li><a href="/#demarche"><span lang="fr">Démarche</span><span lang="en">Approach</span></a></li><li><a href="/a-propos"><span lang="fr">À propos</span><span lang="en">About</span></a></li><li><a href="/contact"><span lang="fr">Contact</span><span lang="en">Contact</span></a></li></ul></nav>
     <div class="nav-tools">
       <div class="lang-toggle" role="group" aria-label="Langue / Language"><button type="button" data-l="fr" class="on" aria-pressed="true">FR</button><button type="button" data-l="en" aria-pressed="false">EN</button></div>
-      <a class="btn btn--primary nav-cta" href="/contact" data-booking><span lang="fr">Réserver un moment avec moi</span><span lang="en">Book time with me</span></a>
+      <a class="btn btn--primary nav-cta" href="/contact" data-booking><span lang="fr">Réserver un moment</span><span lang="en">Book a time</span></a>
       <button class="burger" type="button" aria-label="Menu" aria-expanded="false" aria-controls="mobile-menu"><span></span><span></span><span></span></button>
     </div>
   </div>
@@ -102,13 +103,13 @@
 <pattern id="hatch-h-card-art-vie" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="5" stroke="#13283B" stroke-width=".7" stroke-opacity=".28"/></pattern>
 </defs>
 <rect width="320" height="240" fill="url(#sky-h-card-art-vie)"/>
-<g stroke="#FFFFFF" stroke-width="1.2" stroke-linecap="square" opacity=".9">
+<g data-depth=".35" stroke="#FFFFFF" stroke-width="1.2" stroke-linecap="square" opacity=".9">
 <line x1="24" y1="52" x2="96" y2="52"/><line x1="40" y1="60" x2="78" y2="60"/><line x1="196" y1="84" x2="290" y2="84"/><line x1="222" y1="92" x2="268" y2="92"/>
 </g>
 
 <line x1="0" y1="200.5" x2="320" y2="200.5" stroke="#13283B" stroke-opacity=".35"/>
 <rect x="0" y="201" width="320" height="39" fill="url(#hatch-h-card-art-vie)" opacity=".55"/>
-
+<g data-depth="1">
 <path d="M84 200 V138 A76 76 0 0 1 236 138 V200" fill="#FFFFFF" stroke="#13283B" stroke-width="1.5"/>
 <path d="M98 200 V140 A62 62 0 0 1 222 140 V200" fill="none" stroke="#13283B" stroke-opacity=".35"/>
 <path d="M84 138 A76 76 0 0 1 236 138 L222 140 A62 62 0 0 0 98 140 Z" fill="url(#deep-h-card-art-vie)"/>
@@ -117,7 +118,7 @@
 <rect x="180" y="158" width="22" height="42" fill="#1F6E9C"/>
 <rect x="118" y="146" width="22" height="54" fill="url(#hatch-h-card-art-vie)" opacity=".5"/>
 <line x1="70" y1="200" x2="250" y2="200" stroke="#13283B" stroke-width="2"/>
-<rect x="155" y="104" width="10" height="10" fill="#B8452C"/>
+</g><g data-depth="1.6"><rect x="155" y="104" width="10" height="10" fill="#B8452C"/></g>
 </svg></div>
           <h3><span lang="fr">Assurance vie</span><span lang="en">Life insurance</span></h3>
           <p><span lang="fr">Protéger les vôtres et prévoir la succession, avec le bon type de couverture.</span><span lang="en">Protect your family and plan your estate with the right type of coverage.</span></p>
@@ -131,19 +132,19 @@
 <pattern id="hatch-h-card-art-invalidite" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="5" stroke="#13283B" stroke-width=".7" stroke-opacity=".28"/></pattern>
 </defs>
 <rect width="320" height="240" fill="url(#sky-h-card-art-invalidite)"/>
-<g stroke="#FFFFFF" stroke-width="1.2" stroke-linecap="square" opacity=".9">
+<g data-depth=".35" stroke="#FFFFFF" stroke-width="1.2" stroke-linecap="square" opacity=".9">
 <line x1="24" y1="52" x2="96" y2="52"/><line x1="40" y1="60" x2="78" y2="60"/><line x1="196" y1="84" x2="290" y2="84"/><line x1="222" y1="92" x2="268" y2="92"/>
 </g>
 
 <line x1="0" y1="200.5" x2="320" y2="200.5" stroke="#13283B" stroke-opacity=".35"/>
 <rect x="0" y="201" width="320" height="39" fill="url(#hatch-h-card-art-invalidite)" opacity=".55"/>
-
+<g data-depth="1">
 <path d="M160 42 L216 62 V112 C216 150 193 176 160 192 C127 176 104 150 104 112 V62 Z" fill="url(#deep-h-card-art-invalidite)"/>
 <path d="M160 42 L216 62 V112 C216 150 193 176 160 192 Z" fill="#13283B"/>
 <path d="M160 56 L203 71 V112 C203 142 186 163 160 177 C134 163 117 142 117 112 V71 Z" fill="none" stroke="#FFFFFF" stroke-opacity=".45"/>
 <polyline points="28,122 112,122 126,122 136,96 150,150 164,84 176,122 292,122" fill="none" stroke="#B8452C" stroke-width="2.2" stroke-linejoin="miter"/>
-<rect x="288" y="118" width="8" height="8" fill="#B8452C"/>
-<rect x="104" y="200" width="112" height="6" fill="#13283B" opacity=".18"/>
+
+<rect x="104" y="200" width="112" height="6" fill="#13283B" opacity=".18"/></g><g data-depth="1.6"><rect x="288" y="118" width="8" height="8" fill="#B8452C"/></g>
 </svg></div>
           <h3><span lang="fr">Invalidité et maladies graves</span><span lang="en">Disability and critical illness</span></h3>
           <p><span lang="fr">Garder un revenu et des choix si la santé vous arrête.</span><span lang="en">Keep an income and your options if your health stops you.</span></p>
@@ -157,18 +158,18 @@
 <pattern id="hatch-h-card-art-epargne" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="5" stroke="#13283B" stroke-width=".7" stroke-opacity=".28"/></pattern>
 </defs>
 <rect width="320" height="240" fill="url(#sky-h-card-art-epargne)"/>
-<g stroke="#FFFFFF" stroke-width="1.2" stroke-linecap="square" opacity=".9">
+<g data-depth=".35" stroke="#FFFFFF" stroke-width="1.2" stroke-linecap="square" opacity=".9">
 <line x1="24" y1="52" x2="96" y2="52"/><line x1="40" y1="60" x2="78" y2="60"/><line x1="196" y1="84" x2="290" y2="84"/><line x1="222" y1="92" x2="268" y2="92"/>
 </g>
 
 <line x1="0" y1="200.5" x2="320" y2="200.5" stroke="#13283B" stroke-opacity=".35"/>
 <rect x="0" y="201" width="320" height="39" fill="url(#hatch-h-card-art-epargne)" opacity=".55"/>
-<line x1="56" y1="80" x2="262" y2="80" stroke="#13283B" stroke-opacity=".1"/><line x1="56" y1="110" x2="262" y2="110" stroke="#13283B" stroke-opacity=".1"/><line x1="56" y1="140" x2="262" y2="140" stroke="#13283B" stroke-opacity=".1"/><line x1="56" y1="170" x2="262" y2="170" stroke="#13283B" stroke-opacity=".1"/>
+<g data-depth="1"><line x1="56" y1="80" x2="262" y2="80" stroke="#13283B" stroke-opacity=".1"/><line x1="56" y1="110" x2="262" y2="110" stroke="#13283B" stroke-opacity=".1"/><line x1="56" y1="140" x2="262" y2="140" stroke="#13283B" stroke-opacity=".1"/><line x1="56" y1="170" x2="262" y2="170" stroke="#13283B" stroke-opacity=".1"/>
 <rect x="70" y="168" width="20" height="32" fill="#CFE8F6"/><rect x="98" y="156" width="20" height="44" fill="#7EC3E6"/><rect x="126" y="140" width="20" height="60" fill="#7EC3E6"/><rect x="154" y="122" width="20" height="78" fill="#1F6E9C"/><rect x="182" y="100" width="20" height="100" fill="#1F6E9C"/><rect x="210" y="74" width="20" height="126" fill="#13283B"/>
 <rect x="70" y="168" width="20" height="32" fill="url(#hatch-h-card-art-epargne)"/>
 <path d="M62 176 C110 168 150 140 184 108 S236 54 262 42" fill="none" stroke="#13283B" stroke-width="1.6"/>
-<rect x="257" y="37" width="10" height="10" fill="#B8452C"/>
-<g fill="#FFFFFF" stroke="#13283B" stroke-width="1.2"><ellipse cx="34" cy="194" rx="16" ry="5"/><ellipse cx="34" cy="186" rx="16" ry="5"/><ellipse cx="34" cy="178" rx="16" ry="5"/></g>
+
+<g fill="#FFFFFF" stroke="#13283B" stroke-width="1.2"><ellipse cx="34" cy="194" rx="16" ry="5"/><ellipse cx="34" cy="186" rx="16" ry="5"/><ellipse cx="34" cy="178" rx="16" ry="5"/></g></g><g data-depth="1.6"><rect x="257" y="37" width="10" height="10" fill="#B8452C"/></g>
 </svg></div>
           <h3><span lang="fr">Épargne et retraite</span><span lang="en">Savings and retirement</span></h3>
           <p><span lang="fr">REER, CELI, CELIAPP : dans quel ordre, combien, et pour quel projet. Avec calculateur.</span><span lang="en">RRSP, TFSA, FHSA: in what order, how much, and for which goal. With a calculator.</span></p>
@@ -182,21 +183,21 @@
 <pattern id="hatch-h-card-art-entreprise" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="5" stroke="#13283B" stroke-width=".7" stroke-opacity=".28"/></pattern>
 </defs>
 <rect width="320" height="240" fill="url(#sky-h-card-art-entreprise)"/>
-<g stroke="#FFFFFF" stroke-width="1.2" stroke-linecap="square" opacity=".9">
+<g data-depth=".35" stroke="#FFFFFF" stroke-width="1.2" stroke-linecap="square" opacity=".9">
 <line x1="24" y1="52" x2="96" y2="52"/><line x1="40" y1="60" x2="78" y2="60"/><line x1="196" y1="84" x2="290" y2="84"/><line x1="222" y1="92" x2="268" y2="92"/>
 </g>
 
 <line x1="0" y1="200.5" x2="320" y2="200.5" stroke="#13283B" stroke-opacity=".35"/>
 <rect x="0" y="201" width="320" height="39" fill="url(#hatch-h-card-art-entreprise)" opacity=".55"/>
-
+<g data-depth="1">
 <rect x="52" y="128" width="52" height="72" fill="#7EC3E6"/><rect x="60" y="138" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="60" y="153" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="60" y="168" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="60" y="183" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="71" y="138" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="71" y="153" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="71" y="168" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="71" y="183" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="82" y="138" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="82" y="153" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="82" y="168" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="82" y="183" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="93" y="138" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="93" y="153" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="93" y="168" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="93" y="183" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/>
 <rect x="210" y="112" width="58" height="88" fill="#1F6E9C"/><rect x="219" y="122" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="219" y="137" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="219" y="152" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="219" y="167" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="219" y="182" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="230" y="122" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="230" y="137" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="230" y="152" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="230" y="167" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="230" y="182" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="241" y="122" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="241" y="137" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="241" y="152" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="241" y="167" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="241" y="182" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="252" y="122" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="252" y="137" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="252" y="152" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="252" y="167" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="252" y="182" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/>
 <rect x="112" y="72" width="42" height="128" fill="url(#deep-h-card-art-entreprise)"/><rect x="119" y="82" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="119" y="97" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="119" y="112" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="119" y="127" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="119" y="142" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="119" y="157" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="119" y="172" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="130" y="82" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="130" y="97" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="130" y="112" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="130" y="127" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="130" y="142" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="130" y="157" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="130" y="172" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="141" y="82" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="141" y="97" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="141" y="112" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="141" y="127" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="141" y="142" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="141" y="157" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/><rect x="141" y="172" width="6" height="8" fill="#FFFFFF" fill-opacity="0.55"/>
 <rect x="160" y="40" width="44" height="160" fill="#13283B"/><rect x="167" y="52" width="6" height="8" fill="#FFFFFF" fill-opacity="0.35"/><rect x="167" y="67" width="6" height="8" fill="#FFFFFF" fill-opacity="0.35"/><rect x="167" y="82" width="6" height="8" fill="#FFFFFF" fill-opacity="0.35"/><rect x="167" y="97" width="6" height="8" fill="#FFFFFF" fill-opacity="0.35"/><rect x="167" y="112" width="6" height="8" fill="#FFFFFF" fill-opacity="0.35"/><rect x="167" y="127" width="6" height="8" fill="#FFFFFF" fill-opacity="0.35"/><rect x="167" y="142" width="6" height="8" fill="#FFFFFF" fill-opacity="0.35"/><rect x="167" y="157" width="6" height="8" fill="#FFFFFF" fill-opacity="0.35"/><rect x="167" y="172" width="6" height="8" fill="#FFFFFF" fill-opacity="0.35"/><rect x="178" y="52" width="6" height="8" fill="#FFFFFF" fill-opacity="0.35"/><rect x="178" y="67" width="6" height="8" fill="#FFFFFF" fill-opacity="0.35"/><rect x="178" y="82" width="6" height="8" fill="#FFFFFF" fill-opacity="0.35"/><rect x="178" y="97" width="6" height="8" fill="#FFFFFF" fill-opacity="0.35"/><rect x="178" y="112" width="6" height="8" fill="#FFFFFF" fill-opacity="0.35"/><rect x="178" y="127" width="6" height="8" fill="#FFFFFF" fill-opacity="0.35"/><rect x="178" y="142" width="6" height="8" fill="#FFFFFF" fill-opacity="0.35"/><rect x="178" y="157" width="6" height="8" fill="#FFFFFF" fill-opacity="0.35"/><rect x="178" y="172" width="6" height="8" fill="#FFFFFF" fill-opacity="0.35"/><rect x="189" y="52" width="6" height="8" fill="#FFFFFF" fill-opacity="0.35"/><rect x="189" y="67" width="6" height="8" fill="#FFFFFF" fill-opacity="0.35"/><rect x="189" y="82" width="6" height="8" fill="#FFFFFF" fill-opacity="0.35"/><rect x="189" y="97" width="6" height="8" fill="#FFFFFF" fill-opacity="0.35"/><rect x="189" y="112" width="6" height="8" fill="#FFFFFF" fill-opacity="0.35"/><rect x="189" y="127" width="6" height="8" fill="#FFFFFF" fill-opacity="0.35"/><rect x="189" y="142" width="6" height="8" fill="#FFFFFF" fill-opacity="0.35"/><rect x="189" y="157" width="6" height="8" fill="#FFFFFF" fill-opacity="0.35"/><rect x="189" y="172" width="6" height="8" fill="#FFFFFF" fill-opacity="0.35"/>
-<rect x="178" y="97" width="6" height="8" fill="#B8452C"/>
+
 <rect x="176" y="24" width="2" height="16" fill="#13283B"/>
 <rect x="104" y="160" width="8" height="40" fill="#13283B" opacity=".85"/>
-<line x1="40" y1="200" x2="280" y2="200" stroke="#13283B" stroke-width="2"/>
+<line x1="40" y1="200" x2="280" y2="200" stroke="#13283B" stroke-width="2"/></g><g data-depth="1.6"><rect x="178" y="97" width="6" height="8" fill="#B8452C"/></g>
 </svg></div>
           <h3><span lang="fr">Entrepreneurs</span><span lang="en">Business owners</span></h3>
           <p><span lang="fr">Protéger l'entreprise, ses associés et ses personnes clés.</span><span lang="en">Protect the business, its partners and key people.</span></p>
@@ -210,26 +211,26 @@
 <pattern id="hatch-h-card-art-hypotheque" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="5" stroke="#13283B" stroke-width=".7" stroke-opacity=".28"/></pattern>
 </defs>
 <rect width="320" height="240" fill="url(#sky-h-card-art-hypotheque)"/>
-<g stroke="#FFFFFF" stroke-width="1.2" stroke-linecap="square" opacity=".9">
+<g data-depth=".35" stroke="#FFFFFF" stroke-width="1.2" stroke-linecap="square" opacity=".9">
 <line x1="24" y1="52" x2="96" y2="52"/><line x1="40" y1="60" x2="78" y2="60"/><line x1="196" y1="84" x2="290" y2="84"/><line x1="222" y1="92" x2="268" y2="92"/>
 </g>
 
 <line x1="0" y1="200.5" x2="320" y2="200.5" stroke="#13283B" stroke-opacity=".35"/>
 <rect x="0" y="201" width="320" height="39" fill="url(#hatch-h-card-art-hypotheque)" opacity=".55"/>
-
+<g data-depth="1">
 <rect x="164" y="52" width="100" height="134" fill="#FFFFFF" stroke="#13283B" stroke-width="1.2"/>
 <rect x="164" y="52" width="100" height="14" fill="#CFE8F6"/>
 <line x1="176" y1="76" x2="228" y2="76" stroke="#13283B" stroke-opacity=".3"/><line x1="176" y1="88" x2="248" y2="88" stroke="#13283B" stroke-opacity=".3"/><line x1="176" y1="100" x2="248" y2="100" stroke="#13283B" stroke-opacity=".3"/><line x1="176" y1="112" x2="228" y2="112" stroke="#13283B" stroke-opacity=".3"/><line x1="176" y1="124" x2="248" y2="124" stroke="#13283B" stroke-opacity=".3"/><line x1="176" y1="136" x2="248" y2="136" stroke="#13283B" stroke-opacity=".3"/><line x1="176" y1="148" x2="228" y2="148" stroke="#13283B" stroke-opacity=".3"/>
 <line x1="176" y1="168" x2="226" y2="168" stroke="#13283B"/>
 <path d="M180 164 C188 156 194 170 202 160 S214 166 220 160" fill="none" stroke="#1F6E9C" stroke-width="1.2"/>
-<rect x="234" y="156" width="18" height="18" fill="#B8452C" transform="rotate(45 243 165)"/>
+
 <path d="M60 128 L118 86 L176 128" fill="#13283B"/>
 <rect x="72" y="126" width="92" height="74" fill="#FFFFFF" stroke="#13283B" stroke-width="1.5"/>
 <rect x="84" y="140" width="22" height="22" fill="#7EC3E6"/><line x1="95" y1="140" x2="95" y2="162" stroke="#FFFFFF"/><line x1="84" y1="151" x2="106" y2="151" stroke="#FFFFFF"/>
 <rect x="128" y="150" width="22" height="50" fill="url(#deep-h-card-art-hypotheque)"/>
 <rect x="144" y="173" width="3" height="3" fill="#FFFFFF"/>
 <rect x="72" y="126" width="92" height="10" fill="url(#hatch-h-card-art-hypotheque)"/>
-<line x1="44" y1="200" x2="276" y2="200" stroke="#13283B" stroke-width="2"/>
+<line x1="44" y1="200" x2="276" y2="200" stroke="#13283B" stroke-width="2"/></g><g data-depth="1.6"><rect x="234" y="156" width="18" height="18" fill="#B8452C" transform="rotate(45 243 165)"/></g>
 </svg></div>
           <h3><span lang="fr">Protection hypothécaire</span><span lang="en">Mortgage protection</span></h3>
           <p><span lang="fr">Comparer l'assurance de la banque avec une couverture qui vous appartient.</span><span lang="en">Compare the bank's insurance with coverage you actually own.</span></p>
@@ -243,23 +244,23 @@
 <pattern id="hatch-h-card-art-auto" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="5" stroke="#13283B" stroke-width=".7" stroke-opacity=".28"/></pattern>
 </defs>
 <rect width="320" height="240" fill="url(#sky-h-card-art-auto)"/>
-<g stroke="#FFFFFF" stroke-width="1.2" stroke-linecap="square" opacity=".9">
+<g data-depth=".35" stroke="#FFFFFF" stroke-width="1.2" stroke-linecap="square" opacity=".9">
 <line x1="24" y1="52" x2="96" y2="52"/><line x1="40" y1="60" x2="78" y2="60"/><line x1="196" y1="84" x2="290" y2="84"/><line x1="222" y1="92" x2="268" y2="92"/>
 </g>
 
 <line x1="0" y1="200.5" x2="320" y2="200.5" stroke="#13283B" stroke-opacity=".35"/>
 <rect x="0" y="201" width="320" height="39" fill="url(#hatch-h-card-art-auto)" opacity=".55"/>
-
+<g data-depth="1">
 <g stroke="#13283B" stroke-opacity=".35" stroke-width="1.2"><line x1="20" y1="120" x2="62" y2="120"/><line x1="30" y1="134" x2="58" y2="134"/><line x1="14" y1="148" x2="50" y2="148"/></g>
 <path d="M66 170 V150 C66 142 72 138 80 137 L112 133 L140 106 C146 100 152 98 160 98 H214 C222 98 228 101 233 107 L254 133 L272 137 C280 139 284 144 284 152 V170 Z" fill="url(#deep-h-card-art-auto)"/>
 <path d="M146 108 C150 104 154 103 160 103 H192 V133 H120 Z" fill="#CFE8F6"/>
 <path d="M198 103 H213 C219 103 223 105 227 110 L245 133 H198 Z" fill="#CFE8F6"/>
 <line x1="66" y1="152" x2="284" y2="152" stroke="#FFFFFF" stroke-opacity=".35"/>
-<rect x="266" y="142" width="14" height="6" fill="#B8452C"/>
+
 <rect x="68" y="144" width="10" height="5" fill="#FFFFFF" fill-opacity=".7"/>
 <g><circle cx="110" cy="172" r="19" fill="#13283B"/><circle cx="110" cy="172" r="8" fill="#CFE8F6"/><circle cx="240" cy="172" r="19" fill="#13283B"/><circle cx="240" cy="172" r="8" fill="#CFE8F6"/></g>
 <g stroke="#13283B" stroke-width="3"><line x1="20" y1="200" x2="300" y2="200"/></g>
-<g stroke="#FFFFFF" stroke-width="2"><line x1="40" y1="212" x2="70" y2="212"/><line x1="110" y1="212" x2="140" y2="212"/><line x1="180" y1="212" x2="210" y2="212"/><line x1="250" y1="212" x2="280" y2="212"/></g>
+<g stroke="#FFFFFF" stroke-width="2"><line x1="40" y1="212" x2="70" y2="212"/><line x1="110" y1="212" x2="140" y2="212"/><line x1="180" y1="212" x2="210" y2="212"/><line x1="250" y1="212" x2="280" y2="212"/></g></g><g data-depth="1.6"><rect x="266" y="142" width="14" height="6" fill="#B8452C"/></g>
 </svg></div>
           <h3><span lang="fr">Assurance auto</span><span lang="en">Car insurance</span></h3>
           <p><span lang="fr">Soumission en ligne, protections expliquées par un conseiller.</span><span lang="en">Online quote, coverage explained by an advisor.</span></p>
@@ -273,31 +274,42 @@
 <pattern id="hatch-h-card-art-habitation" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="5" stroke="#13283B" stroke-width=".7" stroke-opacity=".28"/></pattern>
 </defs>
 <rect width="320" height="240" fill="url(#sky-h-card-art-habitation)"/>
-<g stroke="#FFFFFF" stroke-width="1.2" stroke-linecap="square" opacity=".9">
+<g data-depth=".35" stroke="#FFFFFF" stroke-width="1.2" stroke-linecap="square" opacity=".9">
 <line x1="24" y1="52" x2="96" y2="52"/><line x1="40" y1="60" x2="78" y2="60"/><line x1="196" y1="84" x2="290" y2="84"/><line x1="222" y1="92" x2="268" y2="92"/>
 </g>
 
 <line x1="0" y1="200.5" x2="320" y2="200.5" stroke="#13283B" stroke-opacity=".35"/>
 <rect x="0" y="201" width="320" height="39" fill="url(#hatch-h-card-art-habitation)" opacity=".55"/>
-
+<g data-depth="1">
 <rect x="176" y="62" width="14" height="30" fill="#13283B"/>
 <path d="M74 112 L144 58 L214 112 Z" fill="url(#deep-h-card-art-habitation)"/>
 <path d="M144 58 L214 112 H144 Z" fill="#13283B" opacity=".35"/>
 <rect x="86" y="110" width="116" height="90" fill="#FFFFFF" stroke="#13283B" stroke-width="1.5"/>
 <rect x="86" y="110" width="116" height="8" fill="url(#hatch-h-card-art-habitation)"/>
 <rect x="100" y="126" width="26" height="26" fill="#7EC3E6"/><line x1="113.0" y1="126" x2="113.0" y2="152" stroke="#FFFFFF"/><line x1="100" y1="139.0" x2="126" y2="139.0" stroke="#FFFFFF"/><rect x="162" y="126" width="26" height="26" fill="#7EC3E6"/><line x1="175.0" y1="126" x2="175.0" y2="152" stroke="#FFFFFF"/><line x1="162" y1="139.0" x2="188" y2="139.0" stroke="#FFFFFF"/>
-<rect x="132" y="150" width="24" height="50" fill="#13283B"/><rect x="150" y="174" width="3" height="3" fill="#B8452C"/>
+<rect x="132" y="150" width="24" height="50" fill="#13283B"/>
 <rect x="136" y="84" width="16" height="16" fill="#CFE8F6" stroke="#13283B"/>
 <rect x="250" y="160" width="5" height="40" fill="#13283B"/>
 <path d="M252 92 L278 166 H226 Z" fill="#1F6E9C"/><path d="M252 92 L278 166 H252 Z" fill="#13283B" opacity=".4"/>
 <g stroke="#13283B" stroke-opacity=".5"><line x1="30" y1="182" x2="74" y2="182"/><line x1="30" y1="192" x2="74" y2="192"/><line x1="36" y1="176" x2="36" y2="200"/><line x1="52" y1="176" x2="52" y2="200"/><line x1="68" y1="176" x2="68" y2="200"/></g>
-<line x1="24" y1="200" x2="296" y2="200" stroke="#13283B" stroke-width="2"/>
+<line x1="24" y1="200" x2="296" y2="200" stroke="#13283B" stroke-width="2"/></g><g data-depth="1.6"><rect x="150" y="174" width="3" height="3" fill="#B8452C"/></g>
 </svg></div>
           <h3><span lang="fr">Assurance habitation</span><span lang="en">Home insurance</span></h3>
           <p><span lang="fr">Propriétaire, copropriétaire ou locataire : les bonnes protections.</span><span lang="en">Owner, condo owner or tenant: the right coverage.</span></p>
           <span class="h-card-link"><span lang="fr">En savoir plus</span><span lang="en">Learn more</span> <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 10h13M11 5l5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg></span>
         </a>
       </div>
+    </div>
+  </section>
+
+  <!-- ENTRE DEUX : le profil en 60 secondes -->
+  <section class="quiz-band">
+    <div class="wrap">
+      <a class="quiz-band-in" href="/profil" data-cursor-fr="Commencer" data-cursor-en="Start">
+        <span class="eyebrow"><span lang="fr">Profil en 60 secondes</span><span lang="en">60-second profile</span></span>
+        <span class="quiz-band-title"><span lang="fr">Pas certain de ce qu'il vous faut ?<br><em>Cinq questions suffisent.</em></span><span lang="en">Not sure what you need?<br><em>Five questions will tell you.</em></span></span>
+        <span class="btn btn--primary"><span><span lang="fr">Faire le profil</span><span lang="en">Take the profile</span></span><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 10h13M11 5l5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg></span>
+      </a>
     </div>
   </section>
 
@@ -400,6 +412,7 @@
         <ul>
           <li><a href="/"><span lang="fr">Accueil</span><span lang="en">Home</span></a></li>
           <li><a href="/#demarche"><span lang="fr">Démarche</span><span lang="en">Approach</span></a></li>
+          <li><a href="/profil"><span lang="fr">Profil en 60 secondes</span><span lang="en">60-second profile</span></a></li>
           <li><a href="/a-propos"><span lang="fr">À propos</span><span lang="en">About</span></a></li>
           <li><a href="/contact"><span lang="fr">Contact</span><span lang="en">Contact</span></a></li>
           <li><a href="https://bookings.cloud.microsoft/bookwithme/user/1d5a7ad95edf4c28bd1fdcfe008be4d1%40agc.ia.ca?anonymous&ismsaljsauthenabled" target="_blank" rel="noopener"><span lang="fr">Réserver un moment</span><span lang="en">Book a time</span></a></li>

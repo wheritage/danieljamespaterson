@@ -14,12 +14,23 @@
 
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   var DJP = window.DJP = window.DJP || {};
-  var state = DJP.sky = DJP.sky || { climb: 0, density: 0.42, dusk: 0 };
+  // Le ciel commence à l'heure réelle du visiteur (html[data-hour], posé dans <head> ; ?hour=21 pour tester) :
+  // aube, jour, fin de journée, soir, nuit étoilée. Le défilement mène toujours au crépuscule ambre du rendez-vous.
+  var hour = parseInt(document.documentElement.getAttribute('data-hour'), 10);
+  if (isNaN(hour)) hour = new Date().getHours();
+  var base = hour >= 20 || hour < 5 ? { dusk: 0.3, night: 1 }
+    : hour < 7 ? { dusk: 0.6, night: 0.15 }
+    : hour < 17 ? { dusk: 0, night: 0 }
+    : hour < 19 ? { dusk: 0.45, night: 0 }
+    : { dusk: 0.75, night: 0.2 };
+  var state = DJP.sky = DJP.sky || { climb: 0, density: 0.42, dusk: base.dusk, night: base.night };
+  if (state.night === undefined) { state.dusk = base.dusk; state.night = base.night; }
+  DJP.skyBase = base;
 
   var VERT = 'attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
   var FRAG = [
     'precision mediump float;',
-    'uniform vec2 uRes;uniform float uTime;uniform float uClimb;uniform float uDensity;uniform float uDusk;uniform vec2 uMouse;',
+    'uniform vec2 uRes;uniform float uTime;uniform float uClimb;uniform float uDensity;uniform float uDusk;uniform float uNight;uniform vec2 uMouse;',
     'float h(vec2 p){p=fract(p*vec2(123.34,456.21));p+=dot(p,p+45.32);return fract(p.x*p.y);}',
     'float n(vec2 p){vec2 i=floor(p),f=fract(p);vec2 u=f*f*(3.-2.*f);',
     ' return mix(mix(h(i),h(i+vec2(1,0)),u.x),mix(h(i+vec2(0,1)),h(i+vec2(1,1)),u.x),u.y);}',
@@ -43,6 +54,13 @@
     ' vec3 cloudDusk=mix(vec3(.78,.55,.50),vec3(1.,.86,.74),smoothstep(.35,.75,d-shade+.55));',
     ' vec3 cloud=mix(cloudDay,cloudDusk,uDusk);',
     ' vec3 col=mix(sky,cloud,cover*.92);',
+    // Nuit : bleu encre, nuages gris-bleu, étoiles fixes (aucune scintillation) masquées par les nuages
+    ' vec3 nSky=mix(vec3(.10,.17,.27),vec3(.04,.08,.15),g);',
+    ' vec3 nCloud=mix(vec3(.15,.22,.32),vec3(.30,.38,.50),smoothstep(.35,.75,d-shade+.55));',
+    ' vec2 sc=floor(gl_FragCoord.xy/2.);float st=step(.9965,h(sc*.731));',
+    ' float star=st*smoothstep(.25,.75,uv.y)*(1.-cover)*(.55+.45*h(sc+3.1));',
+    ' vec3 nCol=mix(nSky,nCloud,cover*.85)+vec3(star*.9);',
+    ' col=mix(col,nCol,uNight);',
     ' col+=(h(gl_FragCoord.xy+uTime)-.5)*.012;', // tramage léger contre les bandes
     ' gl_FragColor=vec4(col,1.);',
     '}'
@@ -66,7 +84,7 @@
   gl.enableVertexAttribArray(loc);
   gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
   var U = {};
-  ['uRes', 'uTime', 'uClimb', 'uDensity', 'uDusk', 'uMouse'].forEach(function (k) { U[k] = gl.getUniformLocation(prog, k); });
+  ['uRes', 'uTime', 'uClimb', 'uDensity', 'uDusk', 'uNight', 'uMouse'].forEach(function (k) { U[k] = gl.getUniformLocation(prog, k); });
 
   // Rendu à résolution réduite : un ciel flou par nature, autant économiser le GPU
   var SCALE = 0.5;
@@ -91,6 +109,7 @@
     gl.uniform1f(U.uClimb, state.climb);
     gl.uniform1f(U.uDensity, state.density);
     gl.uniform1f(U.uDusk, state.dusk);
+    gl.uniform1f(U.uNight, state.night || 0);
     gl.uniform2f(U.uMouse, mouse.x, mouse.y);
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
   }
@@ -100,7 +119,7 @@
     // Image fixe ; on ne redessine que si l'état du défilement a changé
     draw(40);
     var check = function () {
-      var k = state.climb.toFixed(3) + state.density.toFixed(3) + state.dusk.toFixed(3);
+      var k = state.climb.toFixed(3) + state.density.toFixed(3) + state.dusk.toFixed(3) + (state.night || 0).toFixed(3);
       if (k !== last) { last = k; draw(40); }
       requestAnimationFrame(check);
     };

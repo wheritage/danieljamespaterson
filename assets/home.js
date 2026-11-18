@@ -11,7 +11,8 @@
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (!window.gsap || !window.ScrollTrigger) return;
   gsap.registerPlugin(ScrollTrigger);
-  var sky = DJP.sky = DJP.sky || { climb: 0, density: 0.42, dusk: 0 };
+  var sky = DJP.sky = DJP.sky || { climb: 0, density: 0.42, dusk: 0, night: 0 };
+  var skyBase = DJP.skyBase || { dusk: 0, night: 0 };
 
   /* Lignes d'un titre bilingue (une ligne = un segment entre <br>, par <span lang>) */
   function lines(el) {
@@ -52,7 +53,7 @@
 
   if (reduce) {
     // Images résolues : rien ne bouge, le ciel prend seulement la couleur de la section visible
-    ScrollTrigger.create({ trigger: '.h-dusk', start: 'top 60%', onToggle: function (s) { sky.dusk = s.isActive ? 1 : 0; } });
+    ScrollTrigger.create({ trigger: '.h-dusk', start: 'top 60%', onToggle: function (s) { sky.dusk = s.isActive ? 1 : skyBase.dusk; sky.night = s.isActive ? 0 : skyBase.night; } });
     return;
   }
 
@@ -209,7 +210,7 @@
   }
 
   /* ── Crépuscule : le ciel vire à l'ambre ── */
-  gsap.to(sky, { dusk: 1, density: 0.62, ease: 'none',
+  gsap.to(sky, { dusk: 1, night: 0, density: 0.62, ease: 'none',
     scrollTrigger: { trigger: '.h-dusk', start: 'top bottom', end: 'center center', scrub: 1 } });
 
   ScrollTrigger.sort();

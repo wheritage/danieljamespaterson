@@ -102,3 +102,25 @@ input[type="range"] { width: 100%; accent-color: var(--ambre); height: 28px; cur
 .calc-disc { font-size: .8rem; color: var(--texte3); }
 [data-show][hidden] { display: none !important; }
 @media (max-width: 900px) { .calc { grid-template-columns: 1fr; } .calc-inputs { border-right: 0; border-bottom: 1px solid var(--ligne-fort); } }
+
+/* Mode objectif, besoin en assurance vie */
+.calc-seg--2 { grid-template-columns: 1fr 1fr; }
+.calc-seg--2 label > span { font-size: .82rem; line-height: 1.3; padding: .75rem .6rem; }
+.calc-goal-total p { color: var(--texte2); }
+.calc-goal-total b { font-weight: 600; color: var(--encre); }
+.calc-total strong { min-height: 1em; }
+.calc-group { font-size: .72rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--ambre); padding-top: .4rem; border-top: 1px solid var(--ligne-fort); }
+.calc-group:first-child { border-top: 0; padding-top: 0; }
+.calc-minus { font-style: normal; color: var(--ambre); font-weight: 700; margin-right: .2rem; }
+.needs-bar { position: relative; height: 22px; background: var(--nuage2); overflow: hidden; }
+.nb-seg { position: absolute; left: 0; top: 0; bottom: 0; width: 100%; transform-origin: left; transform: scaleX(0); }
+.nb-cover { position: absolute; left: 0; top: 0; bottom: 0; width: 100%; transform-origin: left; transform: scaleX(0);
+  background: repeating-linear-gradient(135deg, rgba(255,255,255,.85) 0 3px, transparent 3px 7px); border-right: 2px solid var(--ambre); }
+.needs-legend { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: .9rem 1.2rem; }
+.needs-legend dt { font-size: .82rem; color: var(--texte2); display: flex; align-items: center; gap: .5rem; }
+.needs-legend dd { font-family: var(--serif); font-size: 1.35rem; color: var(--encre); font-variant-numeric: tabular-nums; }
+.sw-cover { background: repeating-linear-gradient(135deg, var(--texte3) 0 2px, transparent 2px 4px); border: 1px solid var(--texte3); }
+
+.calc-field > label:has(.calc-minus) { flex-wrap: nowrap; }
+.calc-minus { flex: none; }
+.calc-total strong { overflow: hidden; }
