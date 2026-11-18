@@ -7,9 +7,8 @@
 .s-hero h1 em { font-style: italic; color: var(--ciel-fonce); }
 .s-hero .eyebrow a { text-decoration: none; }
 .s-hero .eyebrow a:hover { color: var(--encre); }
-.s-hero-ill { background: var(--blanc); border: 1px solid var(--ligne); aspect-ratio: 1; display: grid; place-items: center; padding: 14%; }
-.s-ill { width: 100%; height: auto; color: var(--ciel-fonce); }
-.s-ill path, .s-ill rect, .s-ill circle { vector-effect: non-scaling-stroke; }
+.s-hero-ill { border: 1px solid var(--ligne); aspect-ratio: 4 / 3; overflow: hidden; background: var(--ciel-pale); }
+.s-hero-ill .ill { display: block; width: 100%; height: 100%; }
 @media (max-width: 860px) { .s-hero-grid { grid-template-columns: 1fr; } .s-hero-ill { display: none; } }
 
 .s-keys { background: var(--blanc); border-bottom: 1px solid var(--ligne); }

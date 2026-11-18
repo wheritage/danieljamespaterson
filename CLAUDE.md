@@ -74,6 +74,16 @@ IQEE 10 %/250 $, RC auto minimum 50 000 $); never claim Daniel compares several 
 - Line masks get `.16em .14em .2em` padding with matching negative margins so ascenders, descenders and italics never clip.
 
 ## Pages
-`index`, `a-propos`, `contact` (form, `?sujet=vie|invalidite|epargne|entreprise|hypotheque` preselects the topic),
-`confidentialite`, `404`. `tools/scaffold-pages.py` generated the first version; edit the HTML directly from now on
+`index`, `a-propos`, `contact` (booking page, no form), `confidentialite`, `404`, plus the 7 generated service pages.
+`tools/scaffold-pages.py` generated the first version of the non-service pages; edit their HTML directly from now on
 (re-running it overwrites hand edits).
+
+## Photo, bio, illustrations
+- Portrait: `assets/photos/daniel-paterson-{600,900}.{jpg,webp}` (home about + `/a-propos`); `assets/og.jpg` share image.
+- Bio comes from Daniel's brief (financial educator from Montreal's West Island, passion for investing, everyone should
+  invest; creating, protecting and preserving wealth for families, businesses and individuals). `/a-propos` develops
+  it: story, quote, « Créer, protéger, préserver » pillars, commitments. Nothing beyond the brief (no years, degrees,
+  languages) until Daniel confirms it.
+- Service illustrations: `tools/illustrations.py`, flat editorial compositions on a shared sky frame (gradient, wind
+  lines, hatched ground), ink / deep blue / sky / white, one amber detail each. Used by the home cards (`.h-card-art`)
+  and the service heroes. Ids are suffixed per use so gradients never collide.

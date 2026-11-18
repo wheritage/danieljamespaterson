@@ -110,8 +110,8 @@
       .to({}, { duration: 0.12 });
     // Chaque carte : son dessin glisse un peu moins vite que la carte (profondeur)
     // (dans la timeline, pour rester synchronisé avec la pause du début et de la fin)
-    track.querySelectorAll('.h-card-ill').forEach(function (ill, i, all) {
-      tl.fromTo(ill, { xPercent: 10 + i * 2 }, { xPercent: -10 - (all.length - i) * 2, ease: 'none', duration: 1 }, 0.18);
+    track.querySelectorAll('.h-card-art .ill').forEach(function (ill) {
+      tl.fromTo(ill, { xPercent: 4 }, { xPercent: -4, ease: 'none', duration: 1 }, 0.18);
     });
     // Entrée des cartes quand la section arrive
     gsap.from(track.querySelectorAll('.h-card'), { y: 80, opacity: 0, duration: 1.1, ease: 'expo.out', stagger: 0.08,
@@ -171,7 +171,14 @@
       if (DJP.lenis) DJP.lenis.scrollTo(pos(i), { duration: 0.95, easing: easeOut, force: true, onComplete: function () { gliding = false; } });
       else window.scrollTo({ top: pos(i), behavior: 'smooth' });
     }
-    function arrive(i) { if (!DJP.lenis) return; consumed = gesture; glide(i); }
+    // N'aimante à l'arrivée que si la destination du défilement est dans la section (molette) ;
+    // un lien d'ancre ou un saut qui la traverse n'est jamais ramené en arrière.
+    function arrive(i) {
+      if (!DJP.lenis) return;
+      var dest = DJP.lenis.targetScroll;
+      if (dest < st.start - 2 || dest > st.end + 2) return;
+      consumed = gesture; glide(i);
+    }
     DJP.scrollGate = function (d) {
       var e = d && d.event;
       if (!e || e.type !== 'wheel') return true;

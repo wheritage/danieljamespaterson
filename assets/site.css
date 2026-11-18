@@ -393,3 +393,30 @@ html.veiled::after {
 .contact-aside dd a:hover { border-color: var(--ambre); }
 .contact-aside dd { word-break: break-word; }
 .footer-contact { margin-top: 1.6rem; }
+
+/* À propos */
+.ab-hero h1 em { font-style: italic; color: var(--ciel-fonce); }
+.ab-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: clamp(3rem, 7vw, 7rem); align-items: start; }
+.ab-portrait { margin: 0; aspect-ratio: 3 / 4; overflow: hidden; background: var(--ciel-pale); position: sticky; top: calc(var(--header-h) + 2rem); }
+.ab-portrait img, .h-portrait-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ab-story h2 { font-size: clamp(2rem, 3.6vw, 3.2rem); line-height: 1.05; margin-bottom: 1.6rem; }
+.ab-story p { font-size: 1.1rem; color: var(--texte); }
+.ab-quote { font-family: var(--serif); font-style: italic; font-size: clamp(1.5rem, 2.5vw, 2.1rem); line-height: 1.3; color: var(--encre); margin: 2.6rem 0 0; padding-left: 1.4rem; border-left: 2px solid var(--ambre); }
+.ab-pillars { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid rgba(255,255,255,.18); }
+.ab-pillar { padding: 2.4rem 2rem 0 0; }
+.ab-pillar + .ab-pillar { padding-left: 2rem; border-left: 1px solid rgba(255,255,255,.12); }
+.ab-pillar h3 { font-size: clamp(2rem, 3.4vw, 3rem); font-style: italic; margin-bottom: 1rem; }
+.ab-pillar p { color: #A9BCCB; margin-bottom: 1.6rem; }
+.ab-link { display: inline-flex; gap: .6rem; align-items: center; color: var(--ciel); text-decoration: none; font-weight: 600; font-size: .9rem; }
+.ab-link svg { width: 16px; height: 16px; transition: transform .45s var(--ease-out); }
+.ab-link:hover svg { transform: translateX(5px); }
+.ab-commit { display: grid; grid-template-columns: .8fr 1.2fr; gap: 4rem; }
+.ab-list { list-style: none; counter-reset: c; }
+.ab-list li { font-family: var(--serif); font-size: clamp(1.25rem, 2vw, 1.6rem); line-height: 1.35; color: var(--encre); padding: 1.4rem 0; border-top: 1px solid var(--ligne-fort); }
+.ab-list li:last-child { border-bottom: 1px solid var(--ligne-fort); }
+@media (max-width: 860px) {
+  .ab-grid, .ab-commit { grid-template-columns: 1fr; }
+  .ab-portrait { position: static; max-width: 440px; }
+  .ab-pillars { grid-template-columns: 1fr; }
+  .ab-pillar, .ab-pillar + .ab-pillar { padding: 2rem 0; border-left: 0; border-bottom: 1px solid rgba(255,255,255,.12); }
+}

@@ -6,6 +6,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.join(HERE, '..')
 sys.path.insert(0, HERE)
 from services_content import SERVICES
+from illustrations import illustration
 
 SITE = 'https://danieljamespaterson.vercel.app'
 BOOKING = 'https://bookings.cloud.microsoft/bookwithme/user/1d5a7ad95edf4c28bd1fdcfe008be4d1%40agc.ia.ca?anonymous&ismsaljsauthenabled'
@@ -31,8 +32,8 @@ ILL = {
  'habitation': '<path d="M25 65 L80 22 L135 65"/><path d="M38 56 V110 H122 V56"/><rect x="55" y="72" width="20" height="18"/><rect x="88" y="72" width="20" height="38"/>',
 }
 
-def card_ill(key, cls='h-card-ill'):
-    return f'<svg class="{cls}" viewBox="0 0 160 130" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">{ILL[key]}</svg>'
+def card_ill(key, cls='h-card-art', uid=None):
+    return f'<div class="{cls}">{illustration(key, uid or (cls + "-" + key))}</div>'
 
 FOOTER = f'''<footer class="footer">
   <div class="wrap">
@@ -164,7 +165,7 @@ def page(s):
         <p class="lede" data-reveal>{bi(*s["lede"])}</p>
         <div class="hero-actions" data-reveal>{actions}</div>
       </div>
-      <div class="s-hero-ill wipe" aria-hidden="true">{card_ill(s["ill"], "s-ill")}</div>
+      <div class="s-hero-ill wipe" aria-hidden="true">{illustration(s["ill"], "hero-" + s["ill"])}</div>
     </div>
   </section>
 
