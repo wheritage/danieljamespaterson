@@ -420,3 +420,17 @@ html.veiled::after {
   .ab-pillars { grid-template-columns: 1fr; }
   .ab-pillar, .ab-pillar + .ab-pillar { padding: 2rem 0; border-left: 0; border-bottom: 1px solid rgba(255,255,255,.12); }
 }
+
+/* En-tête : « Conseiller en sécurité financière » partout, jamais sur deux lignes */
+.brand-name, .brand-name small, .nav-links a, .nav-cta { white-space: nowrap; }
+@media (max-width: 1180px) {
+  .nav-links, .nav-cta { display: none; }
+  .burger { display: block; }
+}
+@media (max-width: 560px) {
+  .brand-name small { display: block; font-size: .55rem; letter-spacing: .1em; margin-top: .1rem; }
+}
+@media (max-width: 360px) {
+  .brand-name { font-size: .98rem; }
+  .brand-name small { font-size: .5rem; letter-spacing: .06em; }
+}

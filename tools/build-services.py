@@ -39,7 +39,7 @@ FOOTER = f'''<footer class="footer">
   <div class="wrap">
     <div class="footer-grid">
       <div>
-        <a class="brand" href="/">{MARK}<span class="brand-name">Daniel James Paterson<small>{bi("Sécurité financière", "Financial security")}</small></span></a>
+        <a class="brand" href="/">{MARK}<span class="brand-name">Daniel James Paterson<small>{bi("Conseiller en sécurité financière", "Financial security advisor")}</small></span></a>
         <p style="margin-top:1.4rem;max-width:26em">{bi("Des protections et des stratégies financières expliquées simplement, choisies pour votre situation.", "Protection and financial strategies explained plainly, chosen for your situation.")}</p>
         <ul class="footer-contact">
           <li><a href="{PHONE_HREF}">{PHONE}</a></li>

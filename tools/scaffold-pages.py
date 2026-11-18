@@ -56,7 +56,7 @@ def header(page):
     mlinks = ''.join(f'<li><a href="{href}">{bi(fr, en)}</a></li>' for key, fr, en, href in NAV)
     return f'''<header class="site-header">
   <div class="wrap nav">
-    <a class="brand" href="/" data-aria-fr="Daniel James Paterson, accueil" data-aria-en="Daniel James Paterson, home" aria-label="Daniel James Paterson, accueil">{MARK}<span class="brand-name">Daniel James Paterson<small>{bi("Sécurité financière", "Financial security")}</small></span></a>
+    <a class="brand" href="/" data-aria-fr="Daniel James Paterson, accueil" data-aria-en="Daniel James Paterson, home" aria-label="Daniel James Paterson, accueil">{MARK}<span class="brand-name">Daniel James Paterson<small>{bi("Conseiller en sécurité financière", "Financial security advisor")}</small></span></a>
     <nav aria-label="Principale"><ul class="nav-links">{links}</ul></nav>
     <div class="nav-tools">
       <div class="lang-toggle" role="group" aria-label="Langue / Language"><button type="button" data-l="fr" class="on" aria-pressed="true">FR</button><button type="button" data-l="en" aria-pressed="false">EN</button></div>
@@ -75,7 +75,7 @@ FOOTER = f'''<footer class="footer">
   <div class="wrap">
     <div class="footer-grid">
       <div>
-        <a class="brand" href="/">{MARK}<span class="brand-name">Daniel James Paterson<small>{bi("Sécurité financière", "Financial security")}</small></span></a>
+        <a class="brand" href="/">{MARK}<span class="brand-name">Daniel James Paterson<small>{bi("Conseiller en sécurité financière", "Financial security advisor")}</small></span></a>
         <p style="margin-top:1.4rem;max-width:26em">{bi("Des protections et des stratégies financières expliquées simplement, choisies pour votre situation.", "Protection and financial strategies explained plainly, chosen for your situation.")}</p>
       </div>
       <div>
