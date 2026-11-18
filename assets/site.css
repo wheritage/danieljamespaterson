@@ -551,3 +551,5 @@ html.veiled::after {
 .nf-in { position: relative; z-index: 1; pointer-events: none; }
 .nf-in a, .nf-in button { pointer-events: auto; }
 .nf-tip { color: var(--texte2); margin: -.4rem 0 2rem; font-size: .95rem; }
+.footer-legal a { color: #C9DCEA; border-bottom: 1px solid rgba(255,255,255,.25); }
+.footer-legal a:hover { color: var(--blanc); border-color: var(--blanc); }

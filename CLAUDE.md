@@ -12,7 +12,7 @@ Site of Daniel James Paterson, financial security advisor, part of the W Hérita
 - Signature curve `--ease-out: cubic-bezier(.16,1,.3,1)` / GSAP `"expo.out"`.
 - Bilingual through `[lang="fr"]` / `[lang="en"]` spans toggled by `html[data-lang]` (stored in `djp-lang`,
   `?lang=en` forces it). Vouvoiement on the site.
-- `.todo` (amber highlight) marks content still to confirm with Daniel. Remove each one as it is filled.
+- `.todo` (amber highlight) marks content still to confirm with Daniel. None left; AMF certificate no 273174 is in the shared footer (build-services.py `FOOTER`).
 
 ## Smooth scroll and motion
 Same rules as W Héritage: self-hosted `assets/vendor/lenis.min.js` 1.3.27, `gsap.min.js` and
